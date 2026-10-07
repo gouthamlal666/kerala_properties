@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kerala Properties</title>
+  <meta name="description" content="Kerala Properties - news, directory, property listings, featured builders and more." />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            saffron: { DEFAULT: '#fb7e03', 50: '#fff6eb', 100: '#ffe8cc', 200: '#fed09a', 400: '#fd9a3b', 500: '#fb7e03', 600: '#d96a00', 700: '#b35500' },
+            lagoon:  { DEFAULT: '#149fd8', 50: '#ebf8fe', 100: '#d2effc', 200: '#a5dff8', 400: '#3ab4e6', 500: '#149fd8', 600: '#0d85b8', 700: '#0a6a93' },
+            mist:    { DEFAULT: '#999c9d', 100: '#ececed', 200: '#d5d7d7', 300: '#bcbebf', 400: '#999c9d', 500: '#7d8081', 600: '#5f6263' },
+            ink:     { DEFAULT: '#0d1720', 800: '#14222e', 700: '#1c2e3d', 600: '#2a4052' },
+            cream:   '#faf8f4'
+          },
+          fontFamily: {
+            display: ['"Cormorant Garamond"', 'Georgia', 'serif'],
+            sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif']
+          },
+          boxShadow: {
+            soft: '0 10px 40px -12px rgba(13, 23, 32, .18)',
+            glow: '0 12px 30px -8px rgba(251, 126, 3, .45)'
+          }
+        }
+      }
+    }
+  </script>
+
+  <link rel="icon" type="image/png" href="assets/logo-mark.png" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body class="bg-cream font-sans text-ink antialiased">
+
+
+  <!-- ============ TOP BAR ============ -->
+  <div class="hidden md:block bg-ink text-mist-200 text-[13px]">
+    <div class="max-w-7xl mx-auto px-6 h-10 flex items-center justify-between">
+      <div class="flex items-center gap-6">
+        <span class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-saffron animate-pulse"></span>News · Directory · Property Listings</span>
+        <a href="tel:+910000000000" class="hover:text-white transition">+91 000 000 0000</a>
+      </div>
+      <nav class="flex items-center gap-6">
+        <a href="#" class="hover:text-saffron transition">Home</a>
+        <a href="#" class="hover:text-saffron transition">About Us</a>
+        <a href="#newsletter" class="hover:text-saffron transition">Subscribe</a>
+        <a href="#advertise" class="hover:text-saffron transition">Advertise</a>
+        <a href="#contact" class="hover:text-saffron transition">Contact Us</a>
+      </nav>
+    </div>
+  </div>
+
+  <!-- ============ HEADER ============ -->
+  <header id="siteHeader" class="sticky top-0 z-50 transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between gap-6">
+      <!-- Logo -->
+      <a href="#" class="shrink-0" aria-label="Kerala Properties home">
+        <img src="assets/logo.png" alt="Kerala Properties" class="h-11 md:h-12 w-auto" width="548" height="200" />
+      </a>
+
+      <!-- Desktop nav -->
+      <nav class="hidden xl:flex items-center gap-1 text-[15px] font-medium">
+        <a href="#news" class="nav-link">News</a>
+        <a href="#builders" class="nav-link">Directory</a>
+        <a href="#search" class="nav-link">Search Properties</a>
+        <a href="#list-property" class="nav-link">List Properties</a>
+        <a href="#" class="nav-link">Associations</a>
+      </nav>
+
+      <div class="flex items-center gap-2">
+        <a href="#" class="hidden sm:inline-flex items-center gap-2 px-4 py-2.5 text-sm font-semibold rounded-full hover:bg-ink/5 transition">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          Login
+        </a>
+        <a href="#list-property" class="hidden sm:inline-flex btn-primary text-sm">+ List Property</a>
+        <button id="menuBtn" class="xl:hidden w-11 h-11 grid place-items-center rounded-full border border-ink/10 hover:bg-ink/5 transition" aria-label="Open menu" aria-expanded="false">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h10"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile drawer -->
+  <div id="drawer" class="fixed inset-0 z-[60] pointer-events-none">
+    <div id="drawerOverlay" class="absolute inset-0 bg-ink/50 backdrop-blur-sm opacity-0 transition-opacity duration-300"></div>
+    <aside id="drawerPanel" class="absolute right-0 top-0 h-full w-[85%] max-w-sm bg-cream shadow-2xl translate-x-full transition-transform duration-300 flex flex-col">
+      <div class="flex items-center justify-between p-6 border-b border-ink/10">
+        <span class="font-display text-xl font-semibold">Menu</span>
+        <button id="closeMenu" class="w-10 h-10 grid place-items-center rounded-full hover:bg-ink/5" aria-label="Close menu">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg>
+        </button>
+      </div>
+      <nav class="flex flex-col p-4 text-lg font-medium">
+        <a href="#" class="drawer-link">Home</a>
+        <a href="#news" class="drawer-link">News</a>
+        <a href="#builders" class="drawer-link">Directory</a>
+        <a href="#search" class="drawer-link">Search Properties</a>
+        <a href="#list-property" class="drawer-link">List Properties</a>
+        <a href="#" class="drawer-link">Associations</a>
+        <hr class="my-4 border-ink/10" />
+        <a href="#" class="drawer-link text-base">About Us</a>
+        <a href="#newsletter" class="drawer-link text-base">Subscribe</a>
+        <a href="#advertise" class="drawer-link text-base">Advertise</a>
+        <a href="#contact" class="drawer-link text-base">Contact Us</a>
+      </nav>
+      <div class="mt-auto p-6 grid gap-3">
+        <a href="#" class="btn-ghost justify-center">Login</a>
+        <a href="#list-property" class="btn-primary justify-center">+ List Property</a>
+      </div>
+    </aside>
+  </div>
+
+  <main>
+    <!-- ============ HERO (cinematic slider) ============ -->
+    <section id="search" class="hero4 relative isolate overflow-hidden text-white">
+      <!-- Slides (filled by script.js from HERO_SLIDES) -->
+      <div id="heroSlides" class="absolute inset-0 -z-20" aria-hidden="true"></div>
+      <div class="absolute inset-0 -z-10 bg-gradient-to-r from-ink/85 via-ink/45 to-ink/10"></div>
+      <div class="absolute inset-0 -z-10 bg-gradient-to-t from-ink/90 via-ink/10 to-ink/30"></div>
+
+      <div class="hero4-inner max-w-7xl mx-auto px-4 sm:px-6 flex flex-col">
+        <div class="max-w-4xl pt-16 md:pt-24">
+          <p class="hero-eyebrow reveal">News · Directory · Property Listings</p>
+          <h1 class="split-words mt-6 font-display text-[3.2rem] leading-[.98] sm:text-7xl lg:text-[6.4rem] lg:leading-[.92] font-semibold tracking-[-0.02em]">
+            Find your place in <em class="italic font-medium text-saffron-400">God's Own</em> Country.
+          </h1>
+          <p class="mt-7 text-base md:text-lg text-white/75 max-w-xl leading-relaxed reveal" style="--d:.35s">
+            Real estate news, a builders directory, property listings, featured apartments and villas — across all fourteen districts of Kerala.
+          </p>
+        </div>
+
+        <div class="mt-auto pt-14 grid lg:grid-cols-12 gap-5 lg:gap-6 items-end">
+          <!-- Search -->
+          <div class="lg:col-span-8 min-w-0 reveal" style="--d:.5s">
+            <div class="hero4-search">
+              <div class="flex flex-wrap items-center justify-between gap-3 px-3 pt-3 md:px-4 md:pt-4">
+                <div class="search-pills no-scrollbar" role="tablist">
+                  <button class="search-tab is-active" data-tab="properties">Properties</button>
+                  <button class="search-tab" data-tab="apartments">Apartments</button>
+                  <button class="search-tab" data-tab="villas">Villas</button>
+                  <button class="search-tab" data-tab="surplus">Surplus Items</button>
+                </div>
+                <div class="hidden xl:flex items-center gap-3 pr-2 text-[13px] text-white/45">
+                  <span>Popular:</span>
+                  <a href="#" class="hover:text-saffron-400 transition">Kochi</a>
+                  <a href="#" class="hover:text-saffron-400 transition">Thrissur</a>
+                  <a href="#" class="hover:text-saffron-400 transition">Kozhikode</a>
+                </div>
+              </div>
+              <form id="searchForm" class="grid gap-2 p-3 md:p-4 md:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)_minmax(0,1fr)_auto] md:gap-0 items-stretch">
+                <label class="search-field">
+                  <span class="field-icon"><svg fill="none" stroke="currentColor" stroke-width="1.9" viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11a7 7 0 1 1 14 0c0 4.8-7 11-7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg></span>
+                  <span class="field-text">
+                    <span class="search-label">Location</span>
+                    <select class="search-input district-select" name="district"><option value="">All Districts</option></select>
+                  </span>
+                </label>
+                <label class="search-field">
+                  <span class="field-icon"><svg fill="none" stroke="currentColor" stroke-width="1.9" viewBox="0 0 24 24"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v10h13V10"/><path d="M10 20v-5h4v5"/></svg></span>
+                  <span class="field-text">
+                    <span class="search-label">Type</span>
+                    <select class="search-input" name="type">
+                      <option>Any Type</option><option>House</option><option>Land</option><option>Farmhouse</option><option>Apartment</option><option>Villa</option>
+                    </select>
+                  </span>
+                </label>
+                <label class="search-field">
+                  <span class="field-icon"><svg fill="none" stroke="currentColor" stroke-width="1.9" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="13" rx="2.5"/><path d="M3 10h18"/><circle cx="16.5" cy="14.5" r="1.2" fill="currentColor"/></svg></span>
+                  <span class="field-text">
+                    <span class="search-label">Budget</span>
+                    <select class="search-input" name="budget">
+                      <option>Any Budget</option><option>Under ₹ 40 Lakhs</option><option>₹ 40 – 70 Lakhs</option><option>Above ₹ 70 Lakhs</option><option>On Request</option>
+                    </select>
+                  </span>
+                </label>
+                <button type="submit" class="search-go md:ml-3">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+                  <span>Search</span>
+                </button>
+              </form>
+            </div>
+          </div>
+
+          <!-- Now showing -->
+          <div class="lg:col-span-4 min-w-0 reveal" style="--d:.65s">
+            <div class="hero4-caption" aria-live="polite">
+              <div class="flex items-center justify-between gap-4">
+                <p class="font-display text-white/60 text-lg leading-none"><span id="heroIndex" class="text-white text-4xl">01</span> / <span id="heroTotal">04</span></p>
+                <div class="flex gap-2">
+                  <button class="hero4-arrow" data-hero="-1" aria-label="Previous slide"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg></button>
+                  <button class="hero4-arrow" data-hero="1" aria-label="Next slide"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></button>
+                </div>
+              </div>
+              <div class="hero4-progress"><span id="heroProgress"></span></div>
+              <a id="heroCaption" href="#properties" class="hero4-caption-body block">
+                <span id="heroKind" class="block text-[11px] font-bold uppercase tracking-[0.2em] text-saffron-400"></span>
+                <span id="heroTitle" class="block font-display text-[1.75rem] leading-tight mt-1.5"></span>
+                <span class="mt-1 flex items-center justify-between gap-3 text-sm text-white/65">
+                  <span id="heroMeta"></span>
+                  <span class="text-white font-semibold whitespace-nowrap">View →</span>
+                </span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ ADVERTISEMENTS (header ad + top ad strip) ============ -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 mt-12" aria-label="Advertisements">
+      <div class="grid md:grid-cols-4 gap-4" data-stagger>
+        <a href="#advertise" class="ad-box ad-header md:col-span-3">
+          <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1400&q=75&auto=format&fit=crop" alt="" loading="lazy" />
+          <span class="ad-tag">Advertisement</span>
+          <span class="ad-body">
+            <span class="font-display text-3xl md:text-4xl">It's Header Ad</span>
+            <small>Height 120</small>
+          </span>
+          <span class="ad-cta">Book this space →</span>
+        </a>
+        <a href="#advertise" class="ad-box ad-header">
+          <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=600&q=75&auto=format&fit=crop" alt="" loading="lazy" />
+          <span class="ad-tag">Advertisement</span>
+          <span class="ad-body">
+            <span class="font-display text-2xl">Header Ad</span>
+            <small>Height 120</small>
+          </span>
+        </a>
+      </div>
+      <div id="topAds" class="mt-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4" data-stagger></div>
+    </section>
+
+    <!-- ============ QUICK ACCESS ============ -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 py-16">
+      <div class="grid grid-cols-2 md:grid-cols-5 gap-3 md:gap-4" data-stagger>
+        <a href="#news" class="quick-card">
+          <span class="quick-icon bg-saffron-50 text-saffron-600"><svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M4 5h13v14H6a2 2 0 0 1-2-2V5Z"/><path d="M17 9h3v8a2 2 0 0 1-2 2"/><path d="M8 9h5M8 13h5"/></svg></span>
+          <span class="font-semibold">News</span><span class="text-xs text-mist-500">Most recent news</span>
+        </a>
+        <a href="#builders" class="quick-card">
+          <span class="quick-icon bg-lagoon-50 text-lagoon-700"><svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M3 21h18M5 21V7l7-4 7 4v14"/><path d="M9 21v-6h6v6M9 10h.01M15 10h.01"/></svg></span>
+          <span class="font-semibold">Directory</span><span class="text-xs text-mist-500">Builders directory</span>
+        </a>
+        <a href="#properties" class="quick-card">
+          <span class="quick-icon bg-saffron-50 text-saffron-600"><svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></span>
+          <span class="font-semibold">Search Properties</span><span class="text-xs text-mist-500">Houses, land &amp; more</span>
+        </a>
+        <a href="#list-property" class="quick-card">
+          <span class="quick-icon bg-lagoon-50 text-lagoon-700"><svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span>
+          <span class="font-semibold">List Properties</span><span class="text-xs text-mist-500">Post your property</span>
+        </a>
+        <a href="#" class="quick-card col-span-2 md:col-span-1">
+          <span class="quick-icon bg-mist-100 text-mist-600"><svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6M15 14.5c3 0 6 1.8 6 5.5"/></svg></span>
+          <span class="font-semibold">Associations</span><span class="text-xs text-mist-500">Industry bodies</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- ============ NEWS + SPONSORED + PREMIUM ADS ============ -->
+    <section id="news" class="bg-white py-20 md:py-24 border-y border-ink/5">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 grid lg:grid-cols-12 gap-12">
+        <div class="lg:col-span-8 min-w-0">
+          <div class="flex items-end justify-between gap-6 mb-8 reveal">
+            <div>
+              <p class="eyebrow">Latest updates</p>
+              <h2 class="section-title">Most Recent News</h2>
+            </div>
+            <a href="news.html" class="link-arrow hidden sm:inline-flex">More News <span>→</span></a>
+          </div>
+
+          <!-- Lead story -->
+          <a href="#" class="group block">
+            <div class="relative rounded-3xl overflow-hidden aspect-[16/9]" data-anim="mask">
+              <img src="https://images.unsplash.com/photo-1578575437130-527eed3abbec?w=1400&q=80&auto=format&fit=crop" alt="Container ship at port" class="w-full h-full object-cover group-hover:scale-105 transition duration-700" loading="lazy" />
+              <span class="absolute top-5 left-5 badge bg-saffron text-white">Most Recent</span>
+            </div>
+            <h3 class="mt-6 font-display text-2xl md:text-[2rem] leading-snug group-hover:text-saffron transition-colors reveal">ONE adds second Rio de Janeiro call to SX2 service</h3>
+            <p class="mt-3 text-mist-500 leading-relaxed reveal">Right in the middle of the two-day conference agenda, one session promised a big reveal. The announcement drew a packed room, with delegates discussing what the new rotation means for shippers on the route.</p>
+          </a>
+
+          <!-- Sponsored contents slider -->
+          <div class="mt-14 reveal">
+            <div class="flex items-center justify-between gap-4 mb-5">
+              <h3 class="font-display text-2xl md:text-3xl">Sponsored Contents</h3>
+              <div class="flex gap-2">
+                <button class="spons-btn" data-spons="-1" aria-label="Previous slide"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg></button>
+                <button class="spons-btn" data-spons="1" aria-label="Next slide"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></button>
+              </div>
+            </div>
+            <div id="sponsSlider" class="spons-slider" aria-roledescription="carousel"></div>
+            <div id="sponsDots" class="mt-5 flex justify-center gap-2"></div>
+          </div>
+
+          <!-- News grid -->
+          <div id="newsGrid" class="mt-14 grid sm:grid-cols-2 xl:grid-cols-3 gap-6" data-stagger></div>
+          <div class="mt-10 text-center">
+            <a href="news.html" class="btn-ghost">More News »</a>
+          </div>
+        </div>
+
+        <!-- Premium properties (ad slots) -->
+        <aside class="lg:col-span-4">
+          <div class="mb-8 reveal">
+            <p class="eyebrow">Advertisement</p>
+            <h2 class="section-title" style="font-size:clamp(1.9rem,2.5vw,2.4rem)">Premium Properties</h2>
+          </div>
+          <div id="premAds" class="grid sm:grid-cols-2 lg:grid-cols-1 gap-5" data-stagger></div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ============ DISTRICT BAND (scroll-linked) ============ -->
+    <div class="district-band" aria-hidden="true">
+      <div class="district-track" data-marquee="1"></div>
+      <div class="district-track is-outline" data-marquee="-1"></div>
+    </div>
+
+    <!-- ============ PROPERTIES ============ -->
+    <section id="properties" class="max-w-7xl mx-auto px-4 sm:px-6 pt-4 pb-20 md:pb-24">
+      <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-10 reveal">
+        <div>
+          <p class="eyebrow">For sale across Kerala</p>
+          <h2 class="section-title">Properties</h2>
+        </div>
+        <div id="propertyFilters" class="flex flex-wrap gap-2">
+          <button class="filter-chip is-active" data-filter="all">All</button>
+          <button class="filter-chip" data-filter="House for Sale">Houses</button>
+          <button class="filter-chip" data-filter="Land for Sale">Land</button>
+          <button class="filter-chip" data-filter="Farmhouse for Sale">Farmhouses</button>
+        </div>
+      </div>
+      <div id="propertyGrid" data-stagger class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6" aria-live="polite"></div>
+      <div class="mt-12 flex flex-col sm:flex-row items-center justify-between gap-6">
+        <nav id="pager" class="pager" aria-label="Pagination"></nav>
+        <a href="properties.html" class="btn-primary">More Properties <span aria-hidden="true">→</span></a>
+      </div>
+    </section>
+
+    <!-- ============ SURPLUS MATERIALS ============ -->
+    <section class="bg-ink-800 text-white py-20 md:py-24">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6">
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 reveal">
+          <div class="max-w-3xl">
+            <p class="eyebrow text-lagoon">Buy &amp; sell locally</p>
+            <h2 class="section-title text-white" style="font-size:clamp(1.75rem,3vw,2.5rem)">Surplus and Used Building Materials / Household Items for sale</h2>
+          </div>
+          <label class="flex items-center gap-3 bg-white/5 border border-white/10 rounded-full pl-5 pr-2 py-1.5 shrink-0">
+            <svg class="w-4 h-4 text-lagoon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11a7 7 0 1 1 14 0c0 4.8-7 11-7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg>
+            <select id="materialDistrict" class="bg-transparent text-white text-sm font-medium py-2 pr-2 outline-none district-select dark-select" aria-label="Select district"><option value="">- Select District -</option></select>
+          </label>
+        </div>
+        <div id="materialGrid" data-stagger class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-5"></div>
+        <div class="mt-10 text-center">
+          <a href="surplus.html" class="btn-outline-light">View More</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ FEATURED APARTMENTS ============ -->
+    <section id="apartments" class="bg-ink text-white py-20 md:py-24 relative overflow-hidden">
+      <div class="absolute -top-40 -right-40 w-[500px] h-[500px] rounded-full bg-saffron/20 blur-[120px]" data-parallax="0.2"></div>
+      <div class="absolute -bottom-40 -left-40 w-[500px] h-[500px] rounded-full bg-lagoon/15 blur-[120px]" data-parallax="-0.15"></div>
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 relative">
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 reveal">
+          <div>
+            <p class="eyebrow text-saffron">Ready to move</p>
+            <h2 class="section-title text-white">Featured Apartments</h2>
+          </div>
+          <div class="flex gap-3">
+            <button class="slider-btn" data-slider="aptTrack" data-dir="-1" aria-label="Previous">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg>
+            </button>
+            <button class="slider-btn" data-slider="aptTrack" data-dir="1" aria-label="Next">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
+            </button>
+          </div>
+        </div>
+        <div id="aptTrack" class="slider-track" data-stagger></div>
+      </div>
+    </section>
+
+    <!-- ============ FEATURED VILLAS ============ -->
+    <section id="villas" class="max-w-7xl mx-auto px-4 sm:px-6 py-20 md:py-24">
+      <div class="text-center max-w-2xl mx-auto mb-12 reveal">
+        <p class="eyebrow">Private living</p>
+        <h2 class="section-title">Featured Villas</h2>
+      </div>
+      <div id="villaGrid" data-stagger class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-5"></div>
+    </section>
+
+    <!-- ============ FEATURED BUILDERS ============ -->
+    <section id="builders" class="bg-white border-y border-ink/5 py-20 md:py-24">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6">
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 reveal">
+          <div>
+            <p class="eyebrow">Directory</p>
+            <h2 class="section-title">Featured Builders</h2>
+          </div>
+          <select id="builderDistrict" class="select-pill district-select" aria-label="Filter builders by district"><option value="">- Select District -</option></select>
+        </div>
+        <div id="builderGrid" data-stagger class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4"></div>
+        <p id="builderEmpty" class="hidden text-center text-mist-500 py-10">No builders listed in this district yet.</p>
+      </div>
+    </section>
+
+    <!-- ============ CTA: LIST / ADVERTISE ============ -->
+    <section id="list-property" class="max-w-7xl mx-auto px-4 sm:px-6 py-20 grid lg:grid-cols-2 gap-6">
+      <div class="cta-card bg-saffron text-white" data-anim="left">
+        <div class="relative z-10">
+          <p class="uppercase tracking-[0.2em] text-xs font-bold text-white/80">For owners &amp; agents</p>
+          <h3 class="font-display text-3xl md:text-4xl mt-3 leading-tight">List your property<br/>on Kerala Properties.</h3>
+          <p class="mt-4 text-white/85 max-w-md">Houses, land, farmhouses, apartments and villas — list yours and reach buyers across Kerala.</p>
+          <a href="#" class="mt-8 inline-flex items-center gap-2 bg-ink text-white px-6 py-3.5 rounded-full font-semibold hover:bg-ink-700 transition">List Properties <span>→</span></a>
+        </div>
+        <svg class="cta-art" data-parallax="-0.12" viewBox="0 0 200 200" aria-hidden="true"><path d="M20 110 100 40l80 70v80H20z" fill="none" stroke="currentColor" stroke-width="6"/><rect x="80" y="130" width="40" height="60" fill="none" stroke="currentColor" stroke-width="6"/></svg>
+      </div>
+      <div id="advertise" class="cta-card bg-lagoon text-ink" data-anim="right" style="--d:.1s">
+        <div class="relative z-10">
+          <p class="uppercase tracking-[0.2em] text-xs font-bold text-ink/70">For builders &amp; brands</p>
+          <h3 class="font-display text-3xl md:text-4xl mt-3 leading-tight">Advertise with<br/>Kerala Properties.</h3>
+          <p class="mt-4 text-ink/75 max-w-md">Header ads, premium property slots and sponsored content — see our media kits to get started.</p>
+          <a href="#" class="mt-8 inline-flex items-center gap-2 bg-white text-ink px-6 py-3.5 rounded-full font-semibold hover:bg-cream transition">Media kits <span>→</span></a>
+        </div>
+        <svg class="cta-art" data-parallax="-0.12" viewBox="0 0 200 200" aria-hidden="true"><path d="M30 80h40l70-40v120L70 120H30z" fill="none" stroke="currentColor" stroke-width="6" stroke-linejoin="round"/><path d="M60 120l10 50" stroke="currentColor" stroke-width="6"/></svg>
+      </div>
+    </section>
+
+    <!-- ============ NEWSLETTER ============ -->
+    <section id="newsletter" class="max-w-7xl mx-auto px-4 sm:px-6 pb-24">
+      <div class="rounded-[2rem] bg-white border border-ink/5 shadow-soft p-8 md:p-14 grid md:grid-cols-2 gap-8 items-center" data-anim="zoom">
+        <div>
+          <p class="eyebrow">Subscribe</p>
+          <h2 class="font-display text-3xl md:text-4xl">Kerala real estate, in your inbox.</h2>
+          <p class="mt-3 text-mist-500">Get the latest news, sponsored content and new property listings from Kerala Properties.</p>
+        </div>
+        <form id="newsletterForm" class="flex flex-col sm:flex-row gap-3" novalidate>
+          <input type="email" required placeholder="Your email address" class="flex-1 h-14 px-6 rounded-full bg-cream border border-ink/10 focus:border-saffron focus:ring-4 focus:ring-saffron/15 outline-none transition" aria-label="Email address" />
+          <button class="btn-primary h-14 px-8 justify-center">Subscribe</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer id="contact" class="bg-ink text-mist-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 pt-20 pb-10">
+      <div class="grid gap-12 lg:grid-cols-[1.5fr_1fr_1fr_1fr]" data-stagger>
+        <div>
+          <a href="#" class="inline-block" aria-label="Kerala Properties home">
+            <img src="assets/logo.png" alt="Kerala Properties" class="h-14 w-auto" width="548" height="200" loading="lazy" />
+          </a>
+          <address class="not-italic mt-6 leading-relaxed text-sm">
+            <span class="text-white font-semibold">Kerala Properties Media Pvt Ltd</span><br/>
+            Your Building Name, Street Address<br/>
+            Kochi, Kerala 682 001, India<br/>
+            <a href="tel:+910000000000" class="inline-block mt-2 text-saffron hover:text-saffron-400">Tel: +91 000 000 0000</a>
+          </address>
+          <div class="flex gap-3 mt-6">
+            <a href="#" class="social" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 8h3V4h-3c-2.8 0-4 1.7-4 4.5V11H7v4h3v9h4v-9h3l1-4h-4V8.8c0-.5.3-.8 1-.8Z"/></svg></a>
+            <a href="#" class="social" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".5" fill="currentColor"/></svg></a>
+            <a href="#" class="social" aria-label="YouTube"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 8.2a3 3 0 0 0-2.1-2.1C18 5.6 12 5.6 12 5.6s-6 0-7.9.5A3 3 0 0 0 2 8.2 31 31 0 0 0 1.6 12 31 31 0 0 0 2 15.8a3 3 0 0 0 2.1 2.1c1.9.5 7.9.5 7.9.5s6 0 7.9-.5a3 3 0 0 0 2.1-2.1c.3-1.3.4-2.5.4-3.8s-.1-2.5-.4-3.8ZM10 15V9l5.2 3L10 15Z"/></svg></a>
+            <a href="#" class="social" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.5 3a2 2 0 1 1 0 4 2 2 0 0 1 0-4ZM3 9h3v12H3zM9 9h3v1.7c.5-.9 1.7-1.9 3.6-1.9 3.4 0 4.4 2.1 4.4 5.3V21h-3v-6.2c0-1.6-.3-3-2-3s-2.3 1.2-2.3 3V21H9z"/></svg></a>
+          </div>
+        </div>
+        <div>
+          <h4 class="footer-title">Kerala Properties</h4>
+          <ul class="footer-list">
+            <li><a href="#">About</a></li>
+            <li><a href="#">Our Team</a></li>
+            <li><a href="#advertise">Advertise with us</a></li>
+            <li><a href="#">Media kits</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer-title">Properties</h4>
+          <ul class="footer-list">
+            <li><a href="#search">Search Properties</a></li>
+            <li><a href="#list-property">List Properties</a></li>
+            <li><a href="#builders">Builders Directory</a></li>
+            <li><a href="#">Associations</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer-title">News</h4>
+          <ul class="footer-list">
+            <li><a href="#news">Latest News</a></li>
+            <li><a href="#newsletter">Subscribe</a></li>
+            <li><a href="#news">Sponsored Content</a></li>
+            <li><a href="#contact">Contact Us</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="mt-16 pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-mist-500">
+        <p>© <span id="year"></span> Kerala Properties. All rights reserved.</p>
+        <div class="flex gap-6">
+          <a href="#" class="hover:text-white transition">Privacy Policy</a>
+          <a href="#" class="hover:text-white transition">Terms of Use</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Back to top -->
+  <button id="toTop" class="fixed bottom-6 right-6 z-40 w-12 h-12 rounded-full bg-saffron text-white shadow-glow grid place-items-center opacity-0 translate-y-4 pointer-events-none transition-all duration-300" aria-label="Back to top">
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24"><path d="m18 15-6-6-6 6"/></svg>
+  </button>
+
+  <!-- Toast -->
+  <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-ink text-white px-6 py-3.5 rounded-full shadow-2xl text-sm font-medium opacity-0 translate-y-4 pointer-events-none transition-all duration-300"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
