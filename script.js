@@ -2,26 +2,47 @@
    Kerala Properties — homepage interactions
    ========================================================= */
 
-const img = (id, w = 900) =>
-  `https://images.unsplash.com/photo-${id}?w=${w}&q=80&auto=format&fit=crop`;
+const img = (id, w = 900, extra = '') =>
+  `https://images.unsplash.com/photo-${id}?w=${w}&q=80&auto=format&fit=crop${extra}`;
 
+/* ---------------- Settings ---------------- */
+const WHATSAPP_NUMBER = '910000000000';   // country code + number, no "+" or spaces
+const POPUP_INTERVAL = 30000;             // popup ad every 30 seconds
+
+/* ---------------- Search form data ---------------- */
 const DISTRICTS = [
-  'Thiruvananthapuram', 'Kollam', 'Pathanamthitta', 'Alappuzha', 'Kottayam', 'Idukki', 'Ernakulam',
-  'Thrissur', 'Palakkad', 'Malappuram', 'Kozhikode', 'Wayanad', 'Kannur', 'Kasaragod'
+  'Alappuzha', 'Ernakulam', 'Idukki', 'Kannur', 'Kasaragod', 'Kollam', 'Kottayam',
+  'Kozhikode', 'Malappuram', 'Palakkad', 'Pathanamthitta', 'Thiruvananthapuram', 'Thrissur', 'Wayanad'
 ];
 
-/* ---------------- Content (same as the current live site) ----------------
-   Photos are Unsplash placeholders — swap the ids/urls for real listing photos. */
+// Corporations & municipalities per district. Panchayats (941) are typed in —
+// load them from the backend when it is ready.
+const LOCATIONS = {
+  Alappuzha:          { Corporation: [], Municipality: ['Alappuzha', 'Chengannur', 'Cherthala', 'Haripad', 'Kayamkulam', 'Mavelikkara'] },
+  Ernakulam:          { Corporation: ['Kochi'], Municipality: ['Aluva', 'Angamaly', 'Eloor', 'Kalamassery', 'Koothattukulam', 'Kothamangalam', 'Maradu', 'Muvattupuzha', 'North Paravur', 'Perumbavoor', 'Piravom', 'Thrikkakara', 'Thripunithura'] },
+  Idukki:             { Corporation: [], Municipality: ['Kattappana', 'Thodupuzha'] },
+  Kannur:             { Corporation: ['Kannur'], Municipality: ['Anthoor', 'Iritty', 'Kuthuparamba', 'Mattannur', 'Panoor', 'Payyanur', 'Sreekandapuram', 'Taliparamba', 'Thalassery'] },
+  Kasaragod:          { Corporation: [], Municipality: ['Kanhangad', 'Kasaragod', 'Nileshwaram'] },
+  Kollam:             { Corporation: ['Kollam'], Municipality: ['Karunagappally', 'Kottarakkara', 'Paravur', 'Punalur'] },
+  Kottayam:           { Corporation: [], Municipality: ['Changanassery', 'Erattupetta', 'Ettumanoor', 'Kottayam', 'Pala', 'Vaikom'] },
+  Kozhikode:          { Corporation: ['Kozhikode'], Municipality: ['Feroke', 'Koduvally', 'Koyilandy', 'Mukkam', 'Payyoli', 'Ramanattukara', 'Vatakara'] },
+  Malappuram:         { Corporation: [], Municipality: ['Kondotty', 'Kottakkal', 'Malappuram', 'Manjeri', 'Nilambur', 'Parappanangadi', 'Perinthalmanna', 'Ponnani', 'Tanur', 'Tirur', 'Tirurangadi', 'Valanchery'] },
+  Palakkad:           { Corporation: [], Municipality: ['Cherpulassery', 'Chittur-Thathamangalam', 'Mannarkkad', 'Ottapalam', 'Palakkad', 'Pattambi', 'Shoranur'] },
+  Pathanamthitta:     { Corporation: [], Municipality: ['Adoor', 'Pandalam', 'Pathanamthitta', 'Thiruvalla'] },
+  Thiruvananthapuram: { Corporation: ['Thiruvananthapuram'], Municipality: ['Attingal', 'Nedumangad', 'Neyyattinkara', 'Varkala'] },
+  Thrissur:           { Corporation: ['Thrissur'], Municipality: ['Chalakudy', 'Chavakkad', 'Guruvayur', 'Irinjalakuda', 'Kodungallur', 'Kunnamkulam', 'Wadakkanchery'] },
+  Wayanad:            { Corporation: [], Municipality: ['Kalpetta', 'Mananthavady', 'Sulthan Bathery'] }
+};
 
-// Hero slides — each one spotlights a listing from the sections below
-const HERO_SLIDES = [
-  { img: '1613490493576-7fde63acd811', kind: 'Featured Villa', title: 'Kakkanad Heights', meta: 'Kakkanad, Kochi', href: 'detail.html?type=villa&id=1' },
-  { img: '1593693397690-362cb9666fc2', kind: 'Explore Kerala', title: 'Properties in all 14 districts', meta: 'Houses · Land · Farmhouses', href: '#properties' },
-  { img: '1600596542815-ffad4c1539a9', kind: 'House for Sale', title: 'Angamaly, Ernakulam', meta: '4.00 Cents · On Request', href: '#properties' },
-  { img: '1545324418-cc1a3fa10c00', kind: 'Featured Apartment', title: 'City Homes', meta: 'Kaloor, Kochi', href: 'detail.html?type=apartment&id=1' },
-  { img: '1470071459604-3b5ec3a7fe05', kind: 'Land for Sale', title: 'Aluva, Ernakulam', meta: '5.25 Cents · ₹ 23 Lakhs', href: '#properties' }
+const PROPERTY_TYPE_OPTIONS = [
+  'Apartments', 'Bar', 'Building Floor', 'Café', 'Commercial Building', 'Commercial Land', 'Commercial Properties',
+  'Estate and Plantation', 'Farm House', 'Farm Land', 'Flat', 'Godown / Warehouse', 'House', 'House Plot',
+  'Industrial / Manufacturing', 'Office Space', 'PG / Hostel', 'Residential Land', 'Resort', 'School / College',
+  'Shop / Showroom', 'Store', 'Villa'
 ];
-const HERO_DURATION = 6000;
+
+/* ---------------- Content (same as the live site) ----------------
+   Photos are Unsplash placeholders — swap the ids/urls for real photos. */
 
 // Top ad strip — 6 static ads, height 120
 const TOP_ADS = [
@@ -33,8 +54,15 @@ const TOP_ADS = [
   { name: 'Aviation', img: '1436491865332-7a61a109cc05' }
 ];
 
-// Premium properties — 6 ad slots, 300w × 250H
+// Premium properties — 300w × 250H slots; they repeat to fill the column
 const PREMIUM_ADS = ['1613490493576-7fde63acd811', '1600607687939-ce8a6c25118c', '1580587771525-78b9dba3b914', '1512917774080-9991f1c4c750', '1600566753190-17f0baa2a6c3', '1605276374104-dee2a0ed3cd6'];
+
+// Popup ads — 800 × 450
+const POPUP_ADS = [
+  { img: '1613490493576-7fde63acd811', href: '#villas', cta: 'Explore Villas' },
+  { img: '1600596542815-ffad4c1539a9', href: '#properties', cta: 'View Properties' },
+  { img: '1545324418-cc1a3fa10c00', href: '#apartments', cta: 'View Apartments' }
+];
 
 // News cards (3 headlines × 3 rows)
 const NEWS_HEADS = [
@@ -43,9 +71,9 @@ const NEWS_HEADS = [
   { title: 'Adhoc.Express integrates cargo notes and booking technology', img: '1460925895917-afdab827c52f' }
 ];
 const NEWS_ALT_IMGS = ['1474302770737-173ee21bab63', '1553413077-190dd305871c', '1551288049-bebda4e38f71'];
-const NEWS_CAPTION = 'Shares in the logistics group fell 10.7% on Monday after the company announced a major acquisition deal.';
+const NEWS_CAPTION = 'Shares in the logistics group fell 10.7% on Monday after the company announced a major acquisition deal, with analysts watching the integration closely.';
 
-// Sponsored contents — the auto-rotating slider
+// Sponsored content — auto-advancing slider
 const SPONSORED = [
   { title: 'Premium Article One', text: 'Sponsored content from our partners – cold chain, logistics and more.', img: '1553413077-190dd305871c' },
   { title: 'Premium Article Two', text: 'Insights on modern construction materials and technology.', img: '1503387762-592deb58ef4e' },
@@ -53,26 +81,24 @@ const SPONSORED = [
   { title: 'Premium Article Four', text: 'Investing in land and property – what buyers should know.', img: '1560518883-ce09059eeffa' }
 ];
 
-// Properties — 27 listings, 9 per page
+// Properties — first 9 listings (no pagination on the homepage)
 const PROPERTY_PHOTOS = {
-  'House for Sale': ['1600585154340-be6161a56a0c', '1564013799919-ab600027ffc6', '1570129477492-45c003edd2be', '1523217582562-09d0def993a6', '1475855581690-80accde3ae2b', '1600596542815-ffad4c1539a9', '1512917774080-9991f1c4c750', '1580587771525-78b9dba3b914', '1605276374104-dee2a0ed3cd6'],
-  'Land for Sale': ['1500382017468-9049fed747ef', '1470071459604-3b5ec3a7fe05', '1593693397690-362cb9666fc2', '1501785888041-af3ef285b470', '1441974231531-c6227db76b6e', '1506744038136-46273834b3fb', '1464822759023-fed622ff2c3b', '1500382017468-9049fed747ef', '1470071459604-3b5ec3a7fe05'],
-  'Farmhouse for Sale': ['1500076656116-558758c991c1', '1518780664697-55e3ad937233', '1510798831971-661eb04b3739', '1600047509807-ba8f99d2cdde', '1600210492486-724fe5c67fb0', '1500076656116-558758c991c1', '1518780664697-55e3ad937233', '1510798831971-661eb04b3739', '1600047509807-ba8f99d2cdde']
+  'House for Sale': ['1600585154340-be6161a56a0c', '1564013799919-ab600027ffc6', '1570129477492-45c003edd2be'],
+  'Land for Sale': ['1500382017468-9049fed747ef', '1470071459604-3b5ec3a7fe05', '1593693397690-362cb9666fc2'],
+  'Farmhouse for Sale': ['1500076656116-558758c991c1', '1518780664697-55e3ad937233', '1510798831971-661eb04b3739']
 };
 const PROPERTY_TYPES = ['House for Sale', 'Land for Sale', 'Farmhouse for Sale'];
 const PROPERTY_PLACES = ['Angamaly, Ernakulam', 'Aluva, Ernakulam', 'Kakkanad, Kochi', 'Thrissur', 'Palakkad', 'Pathanamthitta', 'Munnar, Idukki', 'Kozhikode', 'Kannur'];
-const PROPERTIES = Array.from({ length: 27 }, (_, i) => {
+const PROPERTIES = Array.from({ length: 9 }, (_, i) => {
   const type = PROPERTY_TYPES[i % 3];
   return {
-    id: i + 1,
     type,
-    loc: PROPERTY_PLACES[i % PROPERTY_PLACES.length],
+    loc: PROPERTY_PLACES[i],
     price: i % 4 === 0 ? 'On Request' : `₹ ${20 + i * 3} Lakhs`,
     area: `${(4 + (i * 1.25) % 10).toFixed(2)} Cents`,
     img: PROPERTY_PHOTOS[type][Math.floor(i / 3)]
   };
 });
-const PER_PAGE = 9;
 
 // Surplus & used materials / household items
 const SURPLUS = [
@@ -108,7 +134,7 @@ const VILLAS = [...VILLA_PLACES, ...VILLA_PLACES.slice().reverse()].map(([place,
   img: VILLA_PHOTOS[i]
 }));
 
-// Featured builders
+// Featured builders — 200 × 100 logo, company name, district
 const BUILDERS = [
   { name: 'Edakom Builders Pvt Ltd', short: 'E', district: 'Ernakulam' },
   { name: 'K2 Builders', short: 'K2', district: 'Kozhikode' },
@@ -123,22 +149,21 @@ const BUILDERS = [
   { name: 'Malabar Builders India Ltd.', short: 'MB', district: 'Kozhikode' },
   { name: 'Sreerosh Properties Pvt Ltd', short: 'SR', district: 'Kottayam' }
 ];
-const BUILDER_COLORS = ['#fb7e03', '#149fd8', '#0d1720', '#999c9d'];
+const BUILDER_COLORS = ['#fb7e03', '#149fd8', '#0d1720', '#7d8081'];
 
 /* ---------------- Helpers ---------------- */
 const $ = (sel, ctx = document) => ctx.querySelector(sel);
 const $$ = (sel, ctx = document) => [...ctx.querySelectorAll(sel)];
+const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 const ICONS = {
   pin: '<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11a7 7 0 1 1 14 0c0 4.8-7 11-7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg>',
-  bed: '<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 18V8M21 18v-5a3 3 0 0 0-3-3H10v5M3 15h18"/><circle cx="6.5" cy="11.5" r="1.5"/></svg>',
-  bath: '<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 12h16v3a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4v-3ZM6 12V5a2 2 0 0 1 4 0"/></svg>',
   area: '<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>',
   tag: '<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12V4h8l10 10-8 8L3 12Z"/><circle cx="7.5" cy="7.5" r="1.5"/></svg>',
   heart: '<svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10Z"/></svg>'
 };
 
-const imgTag = (id, alt, cls = 'w-full h-full object-cover', w = 900) =>
+const imgTag = (id, alt, cls = '', w = 900) =>
   `<img src="${img(id, w)}" alt="${alt}" class="${cls}" loading="lazy" />`;
 
 const showToast = (msg) => {
@@ -146,77 +171,46 @@ const showToast = (msg) => {
   t.textContent = msg;
   t.classList.add('is-visible');
   clearTimeout(showToast._t);
-  showToast._t = setTimeout(() => t.classList.remove('is-visible'), 2600);
+  showToast._t = setTimeout(() => t.classList.remove('is-visible'), 3000);
+};
+
+const fillSelect = (sel, items, keepFirst = true) => {
+  const first = keepFirst ? sel.options[0].outerHTML : '';
+  sel.innerHTML = first + items.map(v => `<option value="${v}">${v}</option>`).join('');
 };
 
 /* ---------------- Renderers ---------------- */
-// Cinematic hero: crossfading Ken Burns slides + "now showing" caption
-function initHeroSlider() {
-  const wrap = $('#heroSlides');
-  const caption = $('#heroCaption');
-  const progress = $('#heroProgress');
-  const pad = n => String(n).padStart(2, '0');
-  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  wrap.innerHTML = HERO_SLIDES.map((sl, i) => `
-    <div class="hero4-slide${i ? '' : ' is-on'}">
-      <img ${i ? 'data-src' : 'src'}="${img(sl.img, 1800)}" alt="" ${i ? '' : 'fetchpriority="high"'} />
-    </div>`).join('');
-  $('#heroTotal').textContent = pad(HERO_SLIDES.length);
-  // First slide loads immediately; the rest preload once the page is ready
-  const preload = () => $$('img[data-src]', wrap).forEach(im => { im.src = im.dataset.src; im.removeAttribute('data-src'); });
-  if (document.readyState === 'complete') preload(); else window.addEventListener('load', preload, { once: true });
-  progress.style.setProperty('--hero-dur', `${HERO_DURATION}ms`);
-
-  let cur = 0, timer;
-  const paint = i => {
-    const sl = HERO_SLIDES[i];
-    $('#heroIndex').textContent = pad(i + 1);
-    $('#heroKind').textContent = sl.kind;
-    $('#heroTitle').textContent = sl.title;
-    $('#heroMeta').textContent = sl.meta;
-    caption.href = sl.href;
-    // restart the progress line
-    progress.classList.remove('is-running'); void progress.offsetWidth;
-    if (!reduced) progress.classList.add('is-running');
-  };
-  const go = n => {
-    const slides = $$('.hero4-slide', wrap);
-    slides[cur].classList.remove('is-on');
-    cur = (n + slides.length) % slides.length;
-    slides[cur].classList.add('is-on');
-    caption.classList.add('is-swapping');
-    setTimeout(() => { paint(cur); caption.classList.remove('is-swapping'); }, 300);
-  };
-  const auto = () => { clearInterval(timer); if (!reduced) timer = setInterval(() => go(cur + 1), HERO_DURATION); };
-
-  $$('.hero4-arrow').forEach(b => b.addEventListener('click', () => { go(cur + Number(b.dataset.hero)); auto(); }));
-  document.addEventListener('visibilitychange', () => (document.hidden ? clearInterval(timer) : auto()));
-  paint(0);
-  auto();
-}
-
 function renderTopAds() {
   $('#topAds').innerHTML = TOP_ADS.map(ad => `
     <a href="#advertise" class="ad-box ad-strip">
       ${imgTag(ad.img, '', '', 500)}
-      <span class="ad-body">
-        <span class="font-display text-xl">${ad.name} Ad</span><small>120 height</small>
-      </span>
+      <span class="ad-body"><span class="font-display text-xl">${ad.name} Ad</span></span>
     </a>`).join('');
 }
 
-function renderPremiumAds() {
-  $('#premAds').innerHTML = PREMIUM_ADS.map((photo, i) => `
-    <a href="#advertise" class="ad-box ad-premium">
-      ${imgTag(photo, '', '', 700)}
-      <span class="ad-tag">Advertisement</span>
-      <span class="ad-body ad-body--bottom">
-        <span class="font-display text-[1.7rem] leading-none">Premium Ad ${i + 1}</span>
-        <small>size 300w x 250H</small>
-      </span>
-      <span class="ad-cta">Advertise here →</span>
-    </a>`).join('');
+const premiumAd = n => `
+  <a href="#advertise" class="ad-box ad-premium" style="--i:${(n - 1) % 6}">
+    ${imgTag(PREMIUM_ADS[(n - 1) % PREMIUM_ADS.length], '', '', 700)}
+    <span class="ad-tag">Advertisement</span>
+    <span class="ad-body ad-body--bottom">
+      <span class="font-display text-[1.65rem] leading-none">Premium Ad ${n}</span>
+    </span>
+    <span class="ad-cta">Advertise here →</span>
+  </a>`;
+
+// Premium ads continue down to the bottom of the properties section
+function fillPremiumAds() {
+  const list = $('#premAds');
+  const wide = window.matchMedia('(min-width: 1024px)').matches;
+  let count = 6;
+  if (wide) {
+    const content = $('#mainSplit').firstElementChild.getBoundingClientRect().height;
+    const head = $('.premium-aside .sec-head').getBoundingClientRect().height + 24;
+    const slot = 250 + 12;
+    count = Math.max(6, Math.floor((content - head + 12) / slot));
+  }
+  if (list.children.length === count) return;
+  list.innerHTML = Array.from({ length: count }, (_, i) => premiumAd(i + 1)).join('');
 }
 
 function renderNews() {
@@ -227,9 +221,9 @@ function renderNews() {
       html += `
       <article class="news-card group">
         <a href="#">
-          <div class="rounded-2xl overflow-hidden aspect-[16/10]">${imgTag(photo, '', 'w-full h-full object-cover group-hover:scale-105 transition duration-700', 600)}</div>
-          <h3 class="mt-4 font-display text-lg leading-snug group-hover:text-saffron transition-colors">${n.title}</h3>
-          <p class="mt-2 text-sm text-mist-500 leading-relaxed line-clamp-2">${NEWS_CAPTION}</p>
+          <h3 class="font-display text-[1.3rem] leading-snug group-hover:text-saffron transition-colors">${n.title}</h3>
+          <div class="img-frame mt-3 aspect-[16/10]">${imgTag(photo, '', '', 600)}</div>
+          <p class="mt-3 text-sm text-mist-600 leading-relaxed">${NEWS_CAPTION}</p>
         </a>
       </article>`;
     });
@@ -237,18 +231,18 @@ function renderNews() {
   $('#newsGrid').innerHTML = html;
 }
 
-// Sponsored contents: fading slider, auto-advances every 4.5 s, pauses on hover
+// Sponsored content: fading slider that advances on its own (no click needed)
 function initSponsored() {
   const slider = $('#sponsSlider');
   const dots = $('#sponsDots');
   slider.innerHTML = SPONSORED.map((s, i) => `
     <a href="#" class="spons-slide${i ? '' : ' is-on'}" aria-hidden="${i ? 'true' : 'false'}">
-      ${imgTag(s.img, s.title, 'absolute inset-0 w-full h-full object-cover', 1200)}
+      ${imgTag(s.img, s.title, 'absolute inset-0 w-full h-full object-cover', 1400)}
       <div class="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/30 to-transparent"></div>
-      <span class="absolute top-5 left-5 badge bg-white/95 text-ink">CN Premium Articles</span>
-      <div class="absolute bottom-0 p-6 md:p-8 text-white max-w-xl">
-        <h4 class="font-display text-2xl md:text-3xl">${s.title}</h4>
-        <p class="mt-2 text-white/75">${s.text}</p>
+      <span class="absolute top-0 left-0 badge bg-white text-ink">CN Premium Articles</span>
+      <div class="absolute bottom-0 p-6 md:p-9 text-white max-w-2xl">
+        <h4 class="font-display text-3xl md:text-[2.6rem] leading-tight">${s.title}</h4>
+        <p class="mt-2 text-white/80 md:text-lg">${s.text}</p>
       </div>
     </a>`).join('');
   dots.innerHTML = SPONSORED.map((_, i) => `<button class="spons-dot${i ? '' : ' is-on'}" data-i="${i}" aria-label="Slide ${i + 1}"></button>`).join('');
@@ -261,52 +255,38 @@ function initSponsored() {
     slides[cur].classList.add('is-on'); slides[cur].setAttribute('aria-hidden', 'false'); ds[cur].classList.add('is-on');
   };
   const auto = () => { clearInterval(timer); timer = setInterval(() => go(cur + 1), 4500); };
-  $$('.spons-btn').forEach(b => b.addEventListener('click', () => { go(cur + Number(b.dataset.spons)); auto(); }));
+  $$('[data-spons]').forEach(b => b.addEventListener('click', () => { go(cur + Number(b.dataset.spons)); auto(); }));
   dots.addEventListener('click', e => { const b = e.target.closest('.spons-dot'); if (b) { go(Number(b.dataset.i)); auto(); } });
-  slider.addEventListener('mouseenter', () => clearInterval(timer));
-  slider.addEventListener('mouseleave', auto);
   auto();
 }
 
-let propFilter = 'all';
-let propPage = 1;
 function renderProperties() {
-  const list = PROPERTIES.filter(p => propFilter === 'all' || p.type === propFilter);
-  const pages = Math.max(1, Math.ceil(list.length / PER_PAGE));
-  propPage = Math.min(propPage, pages);
-  const start = (propPage - 1) * PER_PAGE;
   const badge = { 'House for Sale': 'bg-saffron text-white', 'Land for Sale': 'bg-lagoon text-white', 'Farmhouse for Sale': 'bg-ink text-white' };
-
-  $('#propertyGrid').innerHTML = list.slice(start, start + PER_PAGE).map((p, i) => `
+  $('#propertyGrid').innerHTML = PROPERTIES.map((p, i) => `
     <article class="prop-card" style="--i:${i}">
       <div class="prop-media">
         ${imgTag(p.img, `${p.type} in ${p.loc}`)}
-        <span class="absolute top-4 left-4 badge ${badge[p.type]}">For Sale</span>
-        <button class="fav-btn absolute top-4 right-4" aria-label="Save property">${ICONS.heart}</button>
+        <span class="absolute top-0 left-0 badge ${badge[p.type]}">For Sale</span>
+        <button class="fav-btn absolute top-0 right-0" aria-label="Save property">${ICONS.heart}</button>
       </div>
-      <div class="p-6">
-        <h3 class="font-display text-xl">${p.type}</h3>
-        <dl class="mt-4 grid gap-2.5 text-sm">
+      <div class="p-5">
+        <h3 class="font-display text-[1.45rem]">${p.type}</h3>
+        <dl class="mt-3 grid gap-2.5 text-sm">
           <div class="prop-row"><dt>${ICONS.pin}Location</dt><dd>${p.loc}</dd></div>
           <div class="prop-row"><dt>${ICONS.tag}Price</dt><dd class="text-saffron-600">${p.price}</dd></div>
           <div class="prop-row"><dt>${ICONS.area}Covered Area</dt><dd>${p.area}</dd></div>
         </dl>
-        <a href="#" class="mt-6 flex items-center justify-center gap-2 h-11 rounded-full border border-ink/10 font-semibold text-sm hover:bg-ink hover:text-white hover:border-ink transition">View More <span aria-hidden="true">→</span></a>
+        <a href="#" class="mt-5 flex items-center justify-center gap-2 h-11 border border-ink/15 font-semibold text-sm hover:bg-ink hover:text-white hover:border-ink transition">View More <span aria-hidden="true">→</span></a>
       </div>
     </article>`).join('');
-
-  let pager = `<button data-p="${propPage - 1}" ${propPage === 1 ? 'disabled' : ''} aria-label="Previous page">‹</button>`;
-  for (let n = 1; n <= pages; n++) pager += `<button data-p="${n}" class="${n === propPage ? 'is-on' : ''}" ${n === propPage ? 'aria-current="page"' : ''}>${n}</button>`;
-  pager += `<button data-p="${propPage + 1}" ${propPage === pages ? 'disabled' : ''} aria-label="Next page">›</button>`;
-  $('#pager').innerHTML = pager;
 }
 
 function renderMaterials(district = '') {
   const list = SURPLUS.filter(m => !district || m.district === district);
   $('#materialGrid').innerHTML = list.length ? list.map((m, i) => `
     <a href="#" class="mat-card group" style="--i:${i}">
-      <div class="aspect-square overflow-hidden">${imgTag(m.img, m.name, 'w-full h-full object-cover group-hover:scale-105 transition duration-700', 500)}</div>
-      <div class="p-4 md:p-5">
+      <div class="img-frame aspect-square">${imgTag(m.img, m.name, '', 500)}</div>
+      <div class="p-4">
         <h3 class="font-semibold">${m.name}</h3>
         <p class="mt-1 text-xs text-white/55 leading-relaxed">Good condition, available for quick sale.</p>
         <p class="mt-3 text-[11px] uppercase tracking-[0.14em] text-lagoon flex items-center gap-1.5"><span class="w-3.5 h-3.5">${ICONS.pin}</span>${m.district}</p>
@@ -315,24 +295,23 @@ function renderMaterials(district = '') {
     : `<p class="col-span-full text-center text-white/50 py-10">No items in this district yet.</p>`;
 }
 
-const zoomCard = (x, kind, id, i, dark) => `
-  <article class="zoom-card group${dark ? ' is-dark' : ''}" style="--i:${i}">
-    <div class="relative overflow-hidden rounded-2xl aspect-[4/5]">
-      ${imgTag(x.img, x.name, 'w-full h-full object-cover group-hover:scale-110 transition duration-[1.2s]', 600)}
-      <div class="absolute inset-0 bg-ink/0 group-hover:bg-ink/45 transition duration-500"></div>
-      <button class="fav-btn absolute top-3 right-3" aria-label="Save">${ICONS.heart}</button>
-      <a href="detail.html?type=${kind}&id=${id}" class="zoom-btn">View Details</a>
-    </div>
-    <h3 class="mt-4 font-display text-lg leading-snug">${x.name}</h3>
-    <p class="mt-1 text-sm ${dark ? 'text-white/55' : 'text-mist-500'}">${x.loc}</p>
-  </article>`;
-
-function renderApartments() {
-  $('#aptTrack').innerHTML = APARTMENTS.map((a, i) => zoomCard(a, 'apartment', i + 1, i, true)).join('');
-}
-
-function renderVillas() {
-  $('#villaGrid').innerHTML = VILLAS.map((v, i) => zoomCard(v, 'villa', i + 1, i, false)).join('');
+// Featured apartments / villas — continuous auto-scroll; hover pauses,
+// zooms the photo and reveals an orange "View More" button
+function renderMarquee(trackId, items, kind, dark) {
+  const card = (x, i, clone) => `
+    <article class="mq-card"${clone ? ' aria-hidden="true"' : ''}>
+      <div class="mq-media">
+        <img src="${img(x.img, 600)}" alt="${clone ? '' : x.name}" />
+        <button class="fav-btn" aria-label="Save" ${clone ? 'tabindex="-1"' : ''}>${ICONS.heart}</button>
+        <a href="detail.html?type=${kind}&id=${i + 1}" class="mq-btn" ${clone ? 'tabindex="-1"' : ''}>View More →</a>
+      </div>
+      <h3 class="mt-4 font-display text-[1.45rem] leading-snug">${x.name}</h3>
+      <p class="mt-0.5 text-sm ${dark ? 'text-white/55' : 'text-mist-500'}">${x.loc}</p>
+    </article>`;
+  const track = document.getElementById(trackId);
+  // two copies so the loop is seamless
+  track.innerHTML = items.map((x, i) => card(x, i, false)).join('') + items.map((x, i) => card(x, i, true)).join('');
+  track.style.setProperty('--marquee-dur', `${items.length * 6}s`);
 }
 
 function renderBuilders(district = '') {
@@ -340,29 +319,66 @@ function renderBuilders(district = '') {
   $('#builderEmpty').classList.toggle('hidden', list.length > 0);
   $('#builderGrid').innerHTML = list.map((b, i) => {
     const color = BUILDER_COLORS[BUILDERS.indexOf(b) % BUILDER_COLORS.length];
+    const word = b.name.replace(/\s+(Pvt\.?\s*Ltd\.?|Ltd\.?|India Ltd\.?)$/i, '');
     return `
     <a href="#" class="builder-card" style="--i:${i}">
-      <span class="builder-logo" style="background:${color}">${b.short}</span>
-      <h3 class="font-semibold text-sm leading-snug">${b.name}</h3>
-      <p class="text-xs text-mist-500 mt-1.5">${b.district}</p>
+      <span class="builder-logo">
+        <span class="mark" style="background:${color}">${b.short}</span>
+        <span class="word">${word}</span>
+      </span>
+      <h3 class="mt-3 font-semibold text-sm leading-snug">${b.name}</h3>
+      <p class="text-xs text-mist-500 mt-1">${b.district}</p>
     </a>`;
   }).join('');
 }
 
-/* ---------------- Interactions ---------------- */
-function initDistricts() {
-  const options = DISTRICTS.map(d => `<option value="${d}">${d}</option>`).join('');
-  $$('.district-select').forEach(s => s.insertAdjacentHTML('beforeend', options));
+/* ---------------- Search form ---------------- */
+function initSearch() {
+  const district = $('#sfDistrict');
+  const locType = $('#sfLocType');
+  const location = $('#sfLocation');
+  const panchayat = $('#sfPanchayat');
+
+  fillSelect(district, DISTRICTS);
+  fillSelect($('#sfType'), PROPERTY_TYPE_OPTIONS);
+
+  const updateLocations = () => {
+    const d = district.value, t = locType.value;
+    const isPanchayat = t === 'Panchayat';
+    location.classList.toggle('hidden', isPanchayat);
+    panchayat.classList.toggle('hidden', !isPanchayat);
+    if (isPanchayat) return;
+
+    let items = [];
+    if (d && t) items = LOCATIONS[d][t];
+    else if (d) items = [...LOCATIONS[d].Corporation, ...LOCATIONS[d].Municipality];
+    location.innerHTML = `<option value="">${!d ? '- Select district first -' : items.length ? '- Select -' : `No ${t.toLowerCase()} in ${d}`}</option>` +
+      items.map(v => `<option value="${v}">${v}</option>`).join('');
+  };
+  district.addEventListener('change', updateLocations);
+  locType.addEventListener('change', updateLocations);
+  updateLocations();
+
+  $('#searchForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const f = e.target;
+    const where = (locType.value === 'Panchayat' ? panchayat.value.trim() : location.value) || f.district.value || 'all districts';
+    const what = f.type.value || 'properties';
+    showToast(`Searching ${what.toLowerCase()} for ${f.status.value.toLowerCase()} in ${where}…`);
+  });
 }
 
+/* ---------------- Header, drawer, misc ---------------- */
 function initHeader() {
   $('#toTop').addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+  $('#todayDate').textContent = new Date().toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+  $('#year').textContent = new Date().getFullYear();
 }
 
 function initDrawer() {
   const drawer = $('#drawer');
   const btn = $('#menuBtn');
-  const toggle = (open) => {
+  const toggle = open => {
     drawer.classList.toggle('is-open', open);
     btn.setAttribute('aria-expanded', open);
     document.body.style.overflow = open ? 'hidden' : '';
@@ -374,40 +390,11 @@ function initDrawer() {
   document.addEventListener('keydown', e => e.key === 'Escape' && toggle(false));
 }
 
-function initTabs() {
-  // Hero search tabs
-  $$('.search-tab').forEach(tab => tab.addEventListener('click', () => {
-    $$('.search-tab').forEach(t => t.classList.remove('is-active'));
-    tab.classList.add('is-active');
-  }));
-
-  // Property type filters + pagination
-  $$('#propertyFilters .filter-chip').forEach(chip => chip.addEventListener('click', () => {
-    $$('#propertyFilters .filter-chip').forEach(c => c.classList.remove('is-active'));
-    chip.classList.add('is-active');
-    propFilter = chip.dataset.filter;
-    propPage = 1;
-    renderProperties();
-  }));
-  $('#pager').addEventListener('click', e => {
-    const b = e.target.closest('button');
-    if (!b || b.disabled) return;
-    propPage = Number(b.dataset.p);
-    renderProperties();
-    $('#properties').scrollIntoView({ behavior: 'smooth' });
-  });
-
+function initFilters() {
+  fillSelect($('#materialDistrict'), DISTRICTS);
+  fillSelect($('#builderDistrict'), DISTRICTS);
   $('#materialDistrict').addEventListener('change', e => renderMaterials(e.target.value));
   $('#builderDistrict').addEventListener('change', e => renderBuilders(e.target.value));
-}
-
-function initSlider() {
-  $$('.slider-btn').forEach(btn => btn.addEventListener('click', () => {
-    const track = document.getElementById(btn.dataset.slider);
-    const card = track.firstElementChild;
-    const step = card ? card.getBoundingClientRect().width + 24 : 320;
-    track.scrollBy({ left: step * Number(btn.dataset.dir), behavior: 'smooth' });
-  }));
 }
 
 function initFavourites() {
@@ -420,30 +407,104 @@ function initFavourites() {
   });
 }
 
-function initForms() {
-  $('#searchForm').addEventListener('submit', e => {
+/* ---------------- Quick contact (footer) ---------------- */
+function initContactForm() {
+  const form = $('#contactForm');
+  form.addEventListener('submit', e => {
     e.preventDefault();
-    const district = e.target.district.value || 'all districts';
-    const mode = $('.search-tab.is-active').textContent;
-    showToast(`Searching ${mode.toLowerCase()} in ${district}…`);
-  });
+    const f = form.elements;
+    const checks = [
+      [f.name, f.name.value.trim().length > 1],
+      [f.email, /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(f.email.value.trim())],
+      [f.phone, f.phone.value.replace(/\D/g, '').length >= 7],
+      [f.message, f.message.value.trim().length > 2]
+    ];
+    checks.forEach(([el, ok]) => el.classList.toggle('is-invalid', !ok));
+    const bad = checks.find(([, ok]) => !ok);
+    if (bad) { bad[0].focus(); showToast('Please fill in all the fields correctly'); return; }
 
-  $('#newsletterForm').addEventListener('submit', e => {
-    e.preventDefault();
-    const input = e.target.querySelector('input');
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value.trim())) {
-      input.focus();
-      showToast('Please enter a valid email address');
+    if (window.grecaptcha && typeof grecaptcha.getResponse === 'function' && !grecaptcha.getResponse()) {
+      showToast('Please confirm the reCAPTCHA');
       return;
     }
+    // TODO: send to backend (e.g. fetch('/contact', { method: 'POST', body: new FormData(form) }))
+    form.reset();
+    if (window.grecaptcha && grecaptcha.reset) grecaptcha.reset();
+    showToast("Thank you! We'll get back to you soon.");
+  });
+  form.addEventListener('input', e => e.target.classList.remove('is-invalid'));
+}
+
+/* ---------------- WhatsApp chat ---------------- */
+function initWhatsApp() {
+  const widget = $('#waWidget');
+  const toggleBtn = $('#waToggle');
+  const panel = $('#waPanel');
+  const input = $('#waInput');
+  const setOpen = open => {
+    widget.classList.toggle('is-open', open);
+    toggleBtn.setAttribute('aria-expanded', open);
+    panel.setAttribute('aria-hidden', !open);
+    if (open) {
+      $('#waTime').textContent = new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
+      setTimeout(() => input.focus(), 250);
+    }
+  };
+  toggleBtn.addEventListener('click', () => setOpen(!widget.classList.contains('is-open')));
+  $('#waClose').addEventListener('click', () => setOpen(false));
+  $('#waForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const text = input.value.trim() || 'Hello Kerala Properties, I have an enquiry.';
+    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`, '_blank', 'noopener');
     input.value = '';
-    showToast('Thank you for subscribing!');
   });
 }
 
-/* ---------------- Scroll animations ---------------- */
+/* ---------------- Popup ad: 800 × 450, every 30 s ---------------- */
+function initPopup() {
+  const popup = $('#promoPopup');
+  const image = $('#popupImg');
+  const link = $('#popupLink');
+  const btn = $('#popupBtn');
+  let idx = 0, timer, lastFocus;
 
-// Wrap each word of a heading so it can rise into view one by one.
+  const isBusy = () =>
+    document.hidden ||
+    $('#drawer').classList.contains('is-open') ||
+    $('#waWidget').classList.contains('is-open') ||
+    (document.activeElement && /^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName));
+
+  const schedule = (ms = POPUP_INTERVAL) => { clearTimeout(timer); timer = setTimeout(open, ms); };
+
+  function open() {
+    if (isBusy()) { schedule(5000); return; }   // don't interrupt — try again shortly
+    const ad = POPUP_ADS[idx++ % POPUP_ADS.length];
+    image.src = img(ad.img, 800, '&h=450');
+    link.href = ad.href;
+    btn.href = ad.href;
+    btn.firstChild.textContent = `${ad.cta || 'View Details'} `;
+    lastFocus = document.activeElement;
+    popup.classList.add('is-open');
+    popup.setAttribute('aria-hidden', 'false');
+    btn.focus({ preventScroll: true });
+  }
+  function close() {
+    popup.classList.remove('is-open');
+    popup.setAttribute('aria-hidden', 'true');
+    if (lastFocus && lastFocus.focus) lastFocus.focus({ preventScroll: true });
+    schedule();                                 // next popup 30 s after closing
+  }
+
+  $$('[data-popup-close]', popup).forEach(el => el.addEventListener('click', close));
+  // the ad image and both buttons close the popup and follow their link
+  $$('#popupLink, .popup-btn', popup).forEach(a => a.addEventListener('click', close));
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && popup.classList.contains('is-open')) close(); });
+  // preload the first popup image
+  new Image().src = img(POPUP_ADS[0].img, 800, '&h=450');
+  schedule();
+}
+
+/* ---------------- Scroll animations ---------------- */
 function splitWords(el) {
   const nodes = [...el.childNodes];
   let w = 0;
@@ -471,11 +532,17 @@ function splitWords(el) {
   });
 }
 
-function initReveal() {
-  $$('.section-title').forEach(t => t.classList.add('split-words'));
-  $$('.split-words').forEach(splitWords);
+let pendingReveals = new Set();
+function revealInView() {
+  if (!pendingReveals.size) return;
+  const line = window.innerHeight * 0.9;
+  pendingReveals.forEach(el => {
+    if (el.getBoundingClientRect().top < line) { el.classList.add('is-in'); pendingReveals.delete(el); }
+  });
+}
 
-  // Static stagger groups get their index from DOM order
+function initReveal() {
+  $$('.split-words').forEach(splitWords);
   $$('[data-stagger]').forEach(group =>
     [...group.children].forEach((child, i) => {
       if (!child.style.getPropertyValue('--i')) child.style.setProperty('--i', i);
@@ -483,99 +550,65 @@ function initReveal() {
 
   pendingReveals = new Set($$('.reveal, [data-anim], [data-stagger], .split-words'));
   if (!('IntersectionObserver' in window)) { revealInView(); return; }
-
   const io = new IntersectionObserver(entries => {
     entries.forEach(en => {
       if (en.isIntersecting) { en.target.classList.add('is-in'); pendingReveals.delete(en.target); io.unobserve(en.target); }
     });
-  }, { threshold: 0, rootMargin: '0px 0px -12% 0px' });
+  }, { threshold: 0, rootMargin: '0px 0px -10% 0px' });
   pendingReveals.forEach(el => io.observe(el));
 }
 
-// Safety net for fast scrolls / anchor jumps / throttled observers:
-// anything already at or above the reveal line gets shown.
-let pendingReveals = new Set();
-function revealInView() {
-  if (!pendingReveals.size) return;
-  const line = window.innerHeight * 0.88;
-  pendingReveals.forEach(el => {
-    if (el.getBoundingClientRect().top < line) { el.classList.add('is-in'); pendingReveals.delete(el); }
-  });
-}
-
-function initDistrictBand() {
-  const names = [...DISTRICTS, ...DISTRICTS].map(d => `<span>${d}</span>`).join('');
-  $$('.district-track').forEach(t => { t.innerHTML = names; });
-}
-
-// One rAF-throttled scroll loop drives the header shadow, back-to-top,
-// reveal safety net, parallax layers and the district band.
 function initScrollEngine() {
   const header = $('#siteHeader');
+  const mobileHeader = $('#mobileHeader');
+  const brand = $('.brandrow');
   const toTop = $('#toTop');
   const parallax = $$('[data-parallax]');
-  const band = $('.district-band');
-  const tracks = $$('.district-track');
-  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   let ticking = false;
 
   const update = () => {
     ticking = false;
     const y = window.scrollY;
     const vh = window.innerHeight;
-
-    header.classList.toggle('is-scrolled', y > 10);
-
+    header.classList.toggle('is-scrolled', y > brand.offsetTop + brand.offsetHeight - 2);
+    mobileHeader.classList.toggle('is-scrolled', y > 40);
     toTop.classList.toggle('is-visible', y > 700);
     revealInView();
-
-    if (reduced) return;
-
+    if (reducedMotion) return;
     parallax.forEach(el => {
       const box = (el.parentElement || el).getBoundingClientRect();
       if (box.bottom < -200 || box.top > vh + 200) return;
       const offset = (box.top + box.height / 2 - vh / 2) * -Number(el.dataset.parallax);
       el.style.setProperty('--py', `${offset.toFixed(1)}px`);
     });
-
-    if (band) {
-      const r = band.getBoundingClientRect();
-      if (r.bottom > 0 && r.top < vh) {
-        const p = vh - r.top;
-        tracks.forEach(t => {
-          const dir = Number(t.dataset.marquee);
-          const start = dir > 0 ? 0 : -t.scrollWidth / 2;
-          t.style.transform = `translate3d(${(start - p * 0.45 * dir).toFixed(1)}px, 0, 0)`;
-        });
-      }
-    }
   };
-
-  const onScroll = () => {
-    if (!ticking) { ticking = true; requestAnimationFrame(update); }
-  };
+  const onScroll = () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } };
   window.addEventListener('scroll', onScroll, { passive: true });
   window.addEventListener('resize', onScroll);
   update();
 }
 
-function initCounters() {
-  const run = el => {
-    const to = Number(el.dataset.to);
-    const start = performance.now();
-    const dur = 1600;
-    const tick = now => {
-      const p = Math.min((now - start) / dur, 1);
-      const eased = 1 - Math.pow(1 - p, 3);
-      el.textContent = Math.round(to * eased).toLocaleString('en-IN');
-      if (p < 1) requestAnimationFrame(tick);
-    };
-    requestAnimationFrame(tick);
+
+// Highlight the nav link for the section currently on screen (both navs)
+function initScrollSpy() {
+  const links = $$('[data-spy]');
+  const ids = [...new Set(links.map(a => a.dataset.spy))];
+  const sections = ids.map(id => document.getElementById(id)).filter(Boolean);
+  const setActive = id => {
+    links.forEach(a => a.classList.toggle('is-active', a.dataset.spy === id));
+    // keep the active pill visible in the swipeable mobile row
+    const m = $(`.mnav-link[data-spy="${id}"]`);
+    if (m && window.matchMedia('(max-width: 1023px)').matches) {
+      const row = m.parentElement;
+      row.scrollTo({ left: m.offsetLeft - 16, behavior: 'smooth' });
+    }
   };
+  let current = '';
   const io = new IntersectionObserver(entries => {
-    entries.forEach(en => { if (en.isIntersecting) { run(en.target); io.unobserve(en.target); } });
-  }, { threshold: 0.6 });
-  $$('.counter').forEach(el => io.observe(el));
+    const visible = entries.filter(e => e.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+    if (visible.length && visible[0].target.id !== current) { current = visible[0].target.id; setActive(current); }
+  }, { rootMargin: '-35% 0px -55% 0px' });
+  sections.forEach(sec => io.observe(sec));
 }
 
 function initImageFallback() {
@@ -591,26 +624,30 @@ function initImageFallback() {
 /* ---------------- Boot ---------------- */
 document.addEventListener('DOMContentLoaded', () => {
   initImageFallback();
-  initDistricts();
-  initHeroSlider();
   renderTopAds();
+  initSearch();
   renderNews();
   initSponsored();
-  renderPremiumAds();
   renderProperties();
   renderMaterials();
-  renderApartments();
-  renderVillas();
+  renderMarquee('aptTrack', APARTMENTS, 'apartment', true);
+  renderMarquee('villaTrack', VILLAS, 'villa', false);
   renderBuilders();
+  initFilters();
   initHeader();
   initDrawer();
-  initTabs();
-  initSlider();
   initFavourites();
-  initForms();
-  initDistrictBand();
+  initContactForm();
+  initWhatsApp();
+  initPopup();
   initReveal();
   initScrollEngine();
-  initCounters();
-  $('#year').textContent = new Date().getFullYear();
+  initScrollSpy();
+
+  // Premium ads fill the column once the layout (fonts/images) settles
+  fillPremiumAds();
+  let rt;
+  window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(fillPremiumAds, 200); });
+  window.addEventListener('load', fillPremiumAds);
+  document.fonts && document.fonts.ready.then(fillPremiumAds);
 });
