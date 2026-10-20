@@ -139,6 +139,8 @@ const BUILDER_COLORS = ['#fb7e03', '#149fd8', '#0d1720', '#999c9d'];
 
 /* ---------------- Helpers ---------------- */
 const $ = (sel, ctx = document) => ctx.querySelector(sel);
+// links to homepage sections need 'index.html' in front when used on inner pages
+const HOME = (document.body.dataset.page || 'home') === 'home' ? '' : 'index.html';
 const $$ = (sel, ctx = document) => [...ctx.querySelectorAll(sel)];
 
 const ICONS = {
@@ -210,7 +212,7 @@ function initHeroSlider() {
 
 function renderTopAds() {
   $('#topAds').innerHTML = TOP_ADS.map(ad => `
-    <a href="#advertise" class="ad-box ad-strip" aria-label="${ad.name} advertisement">
+    <a href="${HOME}#advertise" class="ad-box ad-strip" aria-label="${ad.name} advertisement">
       ${imgTag(ad.img, `${ad.name} advertisement`, '', 500)}
     </a>`).join('');
 }
@@ -347,7 +349,7 @@ function renderBuilders(district = '') {
   $('#builderGrid').innerHTML = list.map((b, i) => {
     const color = BUILDER_COLORS[BUILDERS.indexOf(b) % BUILDER_COLORS.length];
     return `
-    <a href="#" class="builder-card" style="--i:${i}">
+    <a href="directory.html?company=${b.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')}" class="builder-card" style="--i:${i}">
       <span class="builder-logo" style="background:${color}">${b.short}</span>
       <h3 class="font-semibold text-sm leading-snug">${b.name}</h3>
       <p class="text-xs text-mist-500 mt-1.5">${b.district}</p>
@@ -590,6 +592,21 @@ function initCounters() {
 
 
 /* ---------------- Footer, WhatsApp, popup, nav highlight (current design) ---------------- */
+// Each form checks its own reCAPTCHA (pages can have more than one)
+function captchaWidgetId(form) {
+  const box = form.querySelector('.g-recaptcha');
+  return box ? [...document.querySelectorAll('.g-recaptcha')].indexOf(box) : -1;
+}
+function captchaOk(form) {
+  const id = captchaWidgetId(form);
+  if (id < 0 || !window.grecaptcha || typeof grecaptcha.getResponse !== 'function') return true;
+  try { return !!grecaptcha.getResponse(id); } catch { return true; }
+}
+function captchaReset(form) {
+  const id = captchaWidgetId(form);
+  if (id >= 0 && window.grecaptcha && grecaptcha.reset) { try { grecaptcha.reset(id); } catch {} }
+}
+
 function initContactForm() {
   const form = $('#contactForm');
   form.addEventListener('submit', e => {
@@ -605,13 +622,10 @@ function initContactForm() {
     const bad = checks.find(([, ok]) => !ok);
     if (bad) { bad[0].focus(); showToast('Please fill in all the fields correctly'); return; }
 
-    if (window.grecaptcha && typeof grecaptcha.getResponse === 'function' && !grecaptcha.getResponse()) {
-      showToast('Please confirm the reCAPTCHA');
-      return;
-    }
+    if (!captchaOk(form)) { showToast('Please confirm the reCAPTCHA'); return; }
     // TODO: send to backend (e.g. fetch('/contact', { method: 'POST', body: new FormData(form) }))
     form.reset();
-    if (window.grecaptcha && grecaptcha.reset) grecaptcha.reset();
+    captchaReset(form);
     showToast("Thank you! We'll get back to you soon.");
   });
   form.addEventListener('input', e => e.target.classList.remove('is-invalid'));
@@ -660,8 +674,8 @@ function initPopup() {
     if (isBusy()) { schedule(5000); return; }   // don't interrupt — try again shortly
     const ad = POPUP_ADS[idx++ % POPUP_ADS.length];
     image.src = img(ad.img, 800, '&h=450');
-    link.href = ad.href;
-    btn.href = ad.href;
+    link.href = HOME + ad.href;
+    btn.href = HOME + ad.href;
     btn.firstChild.textContent = `${ad.cta || 'View Details'} `;
     lastFocus = document.activeElement;
     popup.classList.add('is-open');
@@ -717,31 +731,42 @@ function initImageFallback() {
 
 /* ---------------- Boot ---------------- */
 document.addEventListener('DOMContentLoaded', () => {
+  const page = document.body.dataset.page || 'home';
+
+  // shared on every page: header, ads strip, footer, widgets, animations
   initImageFallback();
   initDistricts();
-  initHeroSlider();
-  renderTopAds();
-  renderNews();
-  initSponsored();
-  renderPremiumAds();
-  renderProperties();
-  renderMaterials();
-  renderApartments();
-  renderVillas();
-  renderBuilders();
+  if ($('#topAds')) renderTopAds();
   initHeader();
   initDrawer();
-  initTabs();
-  initSlider();
   initFavourites();
-  initForms();
-  initDistrictBand();
-  initReveal();
-  initScrollEngine();
-  initScrollSpy();
-  initCounters();
   initContactForm();
   initWhatsApp();
   initPopup();
   $('#year').textContent = new Date().getFullYear();
+
+  // homepage sections
+  if (page === 'home') {
+    initHeroSlider();
+    renderNews();
+    initSponsored();
+    renderPremiumAds();
+    renderProperties();
+    renderMaterials();
+    renderApartments();
+    renderVillas();
+    renderBuilders();
+    initTabs();
+    initSlider();
+    initForms();
+    initDistrictBand();
+    initCounters();
+  }
+
+  // page-specific scripts (e.g. directory.js) hook in here before animations start
+  document.dispatchEvent(new CustomEvent('kp:page-ready', { detail: { page } }));
+
+  initReveal();
+  initScrollEngine();
+  initScrollSpy();
 });
