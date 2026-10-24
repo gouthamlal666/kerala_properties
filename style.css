@@ -1334,3 +1334,35 @@ button.dir-tag:hover { background: var(--ink); }
 .dir-chips { grid-template-columns: repeat(auto-fill, minmax(205px, 1fr)); }
 .dir-chip span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .dir-chip b { flex: none; }
+
+/* =========================================================
+   Full-width search band (above "Latest updates")
+   ========================================================= */
+.searchband4 { position: relative; isolation: isolate; overflow: hidden; margin-top: 24px; background: var(--ink); }
+.searchband4-bg {
+  position: absolute; inset: 0; z-index: -1;
+  background:
+    linear-gradient(90deg, rgba(13, 23, 32, .92), rgba(13, 23, 32, .72) 55%, rgba(13, 23, 32, .55)),
+    url("https://images.unsplash.com/photo-1593693397690-362cb9666fc2?w=2000&q=70&auto=format&fit=crop") center 60% / cover no-repeat;
+}
+.searchband4 .hero4-search { box-shadow: 0 30px 70px -40px rgba(0, 0, 0, .8); }
+
+/* =========================================================
+   Featured Apartments & Villas — same full-width grid
+   5 per row on desktop (3 tablet, 2 phone); a short last row is centred.
+   ========================================================= */
+.zoom-grid { --cols: 2; --gap: 12px; display: flex; flex-wrap: wrap; justify-content: center; gap: 28px var(--gap); }
+.zoom-grid > * { flex: 0 0 calc((100% - (var(--cols) - 1) * var(--gap)) / var(--cols)); min-width: 0; }
+@media (min-width: 768px)  { .zoom-grid { --cols: 3; --gap: 16px; } }
+@media (min-width: 1100px) { .zoom-grid { --cols: 5; --gap: 18px; } }
+.zoom-grid .zoom-card h3 { font-size: 1.15rem; margin-top: 1rem; }
+
+/* hover: image zooms and an orange "View Details" button rises up */
+.zoom-btn { background: var(--saffron); color: #fff; padding: .85rem 1.6rem; font-size: .9rem; box-shadow: 0 14px 30px -12px rgba(251, 126, 3, .8); }
+.zoom-btn:hover { background: #e87200; color: #fff; }
+
+/* Surplus & used materials — same design, larger images in the full-width row */
+.mat-grid { display: grid; gap: 12px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+@media (min-width: 768px)  { .mat-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; } }
+@media (min-width: 1100px) { .mat-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 18px; } }
+.mat-grid .mat-card h3 { font-size: 1.02rem; }

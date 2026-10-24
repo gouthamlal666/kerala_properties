@@ -7,7 +7,8 @@ const img = (id, w = 900, extra = '') =>
 
 /* ---------------- Settings ---------------- */
 const WHATSAPP_NUMBER = '910000000000';   // country code + number, no "+" or spaces
-const POPUP_INTERVAL = 30000;             // popup ad every 30 seconds
+const POPUP_INTERVAL = 5 * 60 * 1000;     // popup ad at most once every 5 minutes (across pages and reloads)
+const POPUP_FIRST_DELAY = 30000;          // first popup 30 s into a visitor's first visit
 
 // Popup ads — 800 × 450
 const POPUP_ADS = [
@@ -281,12 +282,10 @@ function initSponsored() {
 let propFilter = 'all';
 let propPage = 1;
 function renderProperties() {
+  // homepage shows the first 9 — the rest are on "More Properties" (no pagination here)
   const list = PROPERTIES.filter(p => propFilter === 'all' || p.type === propFilter);
-  const pages = Math.max(1, Math.ceil(list.length / PER_PAGE));
-  propPage = Math.min(propPage, pages);
-  const start = (propPage - 1) * PER_PAGE;
 
-  $('#propertyGrid').innerHTML = list.slice(start, start + PER_PAGE).map((p, i) => `
+  $('#propertyGrid').innerHTML = list.slice(0, PER_PAGE).map((p, i) => `
     <article class="prop-card" style="--i:${i}">
       <div class="prop-media">
         ${imgTag(p.img, `${p.type} in ${p.loc}`)}
@@ -302,11 +301,6 @@ function renderProperties() {
         <a href="#" class="mt-6 flex items-center justify-center gap-2 h-11 rounded-full border border-ink/10 font-semibold text-sm hover:bg-ink hover:text-white hover:border-ink transition">View More <span aria-hidden="true">→</span></a>
       </div>
     </article>`).join('');
-
-  let pager = `<button data-p="${propPage - 1}" ${propPage === 1 ? 'disabled' : ''} aria-label="Previous page">‹</button>`;
-  for (let n = 1; n <= pages; n++) pager += `<button data-p="${n}" class="${n === propPage ? 'is-on' : ''}" ${n === propPage ? 'aria-current="page"' : ''}>${n}</button>`;
-  pager += `<button data-p="${propPage + 1}" ${propPage === pages ? 'disabled' : ''} aria-label="Next page">›</button>`;
-  $('#pager').innerHTML = pager;
 }
 
 function renderMaterials(district = '') {
@@ -336,7 +330,7 @@ const zoomCard = (x, kind, id, i, dark) => `
   </article>`;
 
 function renderApartments() {
-  $('#aptTrack').innerHTML = APARTMENTS.map((a, i) => zoomCard(a, 'apartment', i + 1, i, true)).join('');
+  $('#aptGrid').innerHTML = APARTMENTS.map((a, i) => zoomCard(a, 'apartment', i + 1, i, false)).join('');
 }
 
 function renderVillas() {
@@ -398,14 +392,6 @@ function initTabs() {
     propPage = 1;
     renderProperties();
   }));
-  $('#pager').addEventListener('click', e => {
-    const b = e.target.closest('button');
-    if (!b || b.disabled) return;
-    propPage = Number(b.dataset.p);
-    renderProperties();
-    $('#properties').scrollIntoView({ behavior: 'smooth' });
-  });
-
   $('#materialDistrict').addEventListener('change', e => renderMaterials(e.target.value));
   $('#builderDistrict').addEventListener('change', e => renderBuilders(e.target.value));
 }
@@ -660,7 +646,14 @@ function initPopup() {
   const image = $('#popupImg');
   const link = $('#popupLink');
   const btn = $('#popupBtn');
-  let idx = 0, timer, lastFocus;
+  let timer, lastFocus;
+
+  // remember when it was last shown so reloads / page changes don't bring it back early
+  const store = {
+    get(k) { try { return Number(localStorage.getItem(k)) || 0; } catch { return 0; } },
+    set(k, v) { try { localStorage.setItem(k, String(v)); } catch {} }
+  };
+  let idx = store.get('kp_popup_idx');
 
   const isBusy = () =>
     document.hidden ||
@@ -673,6 +666,8 @@ function initPopup() {
   function open() {
     if (isBusy()) { schedule(5000); return; }   // don't interrupt — try again shortly
     const ad = POPUP_ADS[idx++ % POPUP_ADS.length];
+    store.set('kp_popup_idx', idx);
+    store.set('kp_popup_last', Date.now());
     image.src = img(ad.img, 800, '&h=450');
     link.href = HOME + ad.href;
     btn.href = HOME + ad.href;
@@ -686,7 +681,7 @@ function initPopup() {
     popup.classList.remove('is-open');
     popup.setAttribute('aria-hidden', 'true');
     if (lastFocus && lastFocus.focus) lastFocus.focus({ preventScroll: true });
-    schedule();                                 // next popup 30 s after closing
+    schedule();                                 // next popup 5 minutes later
   }
 
   $$('[data-popup-close]', popup).forEach(el => el.addEventListener('click', close));
@@ -694,8 +689,9 @@ function initPopup() {
   $$('#popupLink, .popup-btn', popup).forEach(a => a.addEventListener('click', close));
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && popup.classList.contains('is-open')) close(); });
   // preload the first popup image
-  new Image().src = img(POPUP_ADS[0].img, 800, '&h=450');
-  schedule();
+  new Image().src = img(POPUP_ADS[idx % POPUP_ADS.length].img, 800, '&h=450');
+  const last = store.get('kp_popup_last');
+  schedule(last ? Math.max(5000, last + POPUP_INTERVAL - Date.now()) : POPUP_FIRST_DELAY);
 }
 
 function initScrollSpy() {
@@ -747,7 +743,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // homepage sections
   if (page === 'home') {
-    initHeroSlider();
+    if ($('#heroSlides')) initHeroSlider();   // hero removed from the homepage; kept for reuse
     renderNews();
     initSponsored();
     renderPremiumAds();

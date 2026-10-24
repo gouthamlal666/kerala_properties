@@ -159,109 +159,68 @@
   </div>
 
   <main>
-    <!-- ============ HERO (cinematic slider) ============ -->
-    <section id="search" class="hero4 relative isolate overflow-hidden text-white">
-      <!-- Slides (filled by script.js from HERO_SLIDES) -->
-      <div id="heroSlides" class="absolute inset-0 -z-20" aria-hidden="true"></div>
-      <div class="absolute inset-0 -z-10 bg-gradient-to-r from-ink/85 via-ink/45 to-ink/10"></div>
-      <div class="absolute inset-0 -z-10 bg-gradient-to-t from-ink/90 via-ink/10 to-ink/30"></div>
+    <!-- ============ SIX SMALL ADS ============ -->
+    <section class="wrap mt-6" aria-label="Advertisements">
+      <div id="topAds" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4" data-stagger></div>
+    </section>
 
-      <div class="hero4-inner max-w-7xl mx-auto px-4 sm:px-6 flex flex-col">
-        <div class="max-w-4xl pt-16 md:pt-24">
-          <p class="hero-eyebrow reveal">News · Directory · Property Listings</p>
-          <h1 class="split-words mt-6 font-display text-[2.4rem] leading-[1.08] sm:text-[3.4rem] lg:text-[4.4rem] lg:leading-[1.05] font-bold tracking-[-0.02em]">
-            Find your place in <em class="italic font-medium text-saffron-400">God's Own</em> Country.
-          </h1>
-          <p class="mt-7 text-base md:text-lg text-white/75 max-w-xl leading-relaxed reveal" style="--d:.35s">
-            Real estate news, a builders directory, property listings, featured apartments and villas — across all fourteen districts of Kerala.
-          </p>
-        </div>
-
-        <div class="mt-auto pt-14 grid lg:grid-cols-12 gap-5 lg:gap-6 items-end">
-          <!-- Search -->
-          <div class="lg:col-span-8 min-w-0 reveal" style="--d:.5s">
-            <div class="hero4-search">
-              <div class="flex flex-wrap items-center justify-between gap-3 px-3 pt-3 md:px-4 md:pt-4">
-                <div class="search-pills no-scrollbar" role="tablist">
-                  <button class="search-tab is-active" data-tab="properties">Properties</button>
-                  <button class="search-tab" data-tab="apartments">Apartments</button>
-                  <button class="search-tab" data-tab="villas">Villas</button>
-                  <button class="search-tab" data-tab="surplus">Surplus Items</button>
-                </div>
-                <div class="hidden xl:flex items-center gap-3 pr-2 text-[13px] text-white/45">
-                  <span>Popular:</span>
-                  <a href="#" class="hover:text-saffron-400 transition">Kochi</a>
-                  <a href="#" class="hover:text-saffron-400 transition">Thrissur</a>
-                  <a href="#" class="hover:text-saffron-400 transition">Kozhikode</a>
-                </div>
-              </div>
-              <form id="searchForm" class="grid gap-2 p-3 md:p-4 md:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)_minmax(0,1fr)_auto] md:gap-0 items-stretch">
-                <label class="search-field">
-                  <span class="field-icon"><svg fill="none" stroke="currentColor" stroke-width="1.9" viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11a7 7 0 1 1 14 0c0 4.8-7 11-7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg></span>
-                  <span class="field-text">
-                    <span class="search-label">Location</span>
-                    <select class="search-input district-select" name="district"><option value="">All Districts</option></select>
-                  </span>
-                </label>
-                <label class="search-field">
-                  <span class="field-icon"><svg fill="none" stroke="currentColor" stroke-width="1.9" viewBox="0 0 24 24"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v10h13V10"/><path d="M10 20v-5h4v5"/></svg></span>
-                  <span class="field-text">
-                    <span class="search-label">Type</span>
-                    <select class="search-input" name="type">
-                      <option>Any Type</option><option>House</option><option>Land</option><option>Farmhouse</option><option>Apartment</option><option>Villa</option>
-                    </select>
-                  </span>
-                </label>
-                <label class="search-field">
-                  <span class="field-icon"><svg fill="none" stroke="currentColor" stroke-width="1.9" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="13" rx="2.5"/><path d="M3 10h18"/><circle cx="16.5" cy="14.5" r="1.2" fill="currentColor"/></svg></span>
-                  <span class="field-text">
-                    <span class="search-label">Budget</span>
-                    <select class="search-input" name="budget">
-                      <option>Any Budget</option><option>Under ₹ 40 Lakhs</option><option>₹ 40 – 70 Lakhs</option><option>Above ₹ 70 Lakhs</option><option>On Request</option>
-                    </select>
-                  </span>
-                </label>
-                <button type="submit" class="search-go md:ml-3">
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-                  <span>Search</span>
-                </button>
-              </form>
+    <!-- ============ SEARCH (full width, above Latest updates) ============ -->
+    <section id="search" class="searchband4" aria-label="Search properties">
+      <div class="searchband4-bg" aria-hidden="true"></div>
+      <div class="wrap relative py-7 md:py-9 reveal">
+        <div class="hero4-search">
+          <div class="flex flex-wrap items-center justify-between gap-3 px-3 pt-3 md:px-4 md:pt-4">
+            <div class="search-pills no-scrollbar" role="tablist">
+              <button class="search-tab is-active" data-tab="properties">Properties</button>
+              <button class="search-tab" data-tab="apartments">Apartments</button>
+              <button class="search-tab" data-tab="villas">Villas</button>
+              <button class="search-tab" data-tab="surplus">Surplus Items</button>
+            </div>
+            <div class="hidden xl:flex items-center gap-3 pr-2 text-[13px] text-white/45">
+              <span>Popular:</span>
+              <a href="#" class="hover:text-saffron-400 transition">Kochi</a>
+              <a href="#" class="hover:text-saffron-400 transition">Thrissur</a>
+              <a href="#" class="hover:text-saffron-400 transition">Kozhikode</a>
             </div>
           </div>
-
-          <!-- Now showing -->
-          <div class="lg:col-span-4 min-w-0 reveal" style="--d:.65s">
-            <div class="hero4-caption" aria-live="polite">
-              <div class="flex items-center justify-between gap-4">
-                <p class="font-display text-white/60 text-lg leading-none"><span id="heroIndex" class="text-white text-4xl">01</span> / <span id="heroTotal">04</span></p>
-                <div class="flex gap-2">
-                  <button class="hero4-arrow" data-hero="-1" aria-label="Previous slide"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg></button>
-                  <button class="hero4-arrow" data-hero="1" aria-label="Next slide"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></button>
-                </div>
-              </div>
-              <div class="hero4-progress"><span id="heroProgress"></span></div>
-              <a id="heroCaption" href="#properties" class="hero4-caption-body block">
-                <span id="heroKind" class="block text-[11px] font-bold uppercase tracking-[0.2em] text-saffron-400"></span>
-                <span id="heroTitle" class="block font-display text-[1.4rem] leading-tight mt-1.5"></span>
-                <span class="mt-1 flex items-center justify-between gap-3 text-sm text-white/65">
-                  <span id="heroMeta"></span>
-                  <span class="text-white font-semibold whitespace-nowrap">View →</span>
-                </span>
-              </a>
-            </div>
-          </div>
+          <form id="searchForm" class="grid gap-2 p-3 md:p-4 md:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)_minmax(0,1fr)_auto] md:gap-0 items-stretch">
+            <label class="search-field">
+              <span class="field-icon"><svg fill="none" stroke="currentColor" stroke-width="1.9" viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11a7 7 0 1 1 14 0c0 4.8-7 11-7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg></span>
+              <span class="field-text">
+                <span class="search-label">Location</span>
+                <select class="search-input district-select" name="district"><option value="">All Districts</option></select>
+              </span>
+            </label>
+            <label class="search-field">
+              <span class="field-icon"><svg fill="none" stroke="currentColor" stroke-width="1.9" viewBox="0 0 24 24"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v10h13V10"/><path d="M10 20v-5h4v5"/></svg></span>
+              <span class="field-text">
+                <span class="search-label">Type</span>
+                <select class="search-input" name="type">
+                  <option>Any Type</option><option>House</option><option>Land</option><option>Farmhouse</option><option>Apartment</option><option>Villa</option>
+                </select>
+              </span>
+            </label>
+            <label class="search-field">
+              <span class="field-icon"><svg fill="none" stroke="currentColor" stroke-width="1.9" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="13" rx="2.5"/><path d="M3 10h18"/><circle cx="16.5" cy="14.5" r="1.2" fill="currentColor"/></svg></span>
+              <span class="field-text">
+                <span class="search-label">Budget</span>
+                <select class="search-input" name="budget">
+                  <option>Any Budget</option><option>Under ₹ 40 Lakhs</option><option>₹ 40 – 70 Lakhs</option><option>Above ₹ 70 Lakhs</option><option>On Request</option>
+                </select>
+              </span>
+            </label>
+            <button type="submit" class="search-go md:ml-3">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+              <span>Search</span>
+            </button>
+          </form>
         </div>
       </div>
     </section>
 
-    <!-- ============ SIX SMALL ADS ============ -->
-    <section class="max-w-7xl mx-auto px-4 sm:px-6 mt-12" aria-label="Advertisements">
-      <div id="topAds" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4" data-stagger></div>
-    </section>
-
     <!-- ============ NEWS + SPONSORED + PREMIUM ADS ============ -->
     <section id="news" class="bg-white py-20 md:py-24 border-y border-ink/5">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 grid lg:grid-cols-12 gap-12">
+      <div class="wrap grid lg:grid-cols-12 gap-12">
         <div class="lg:col-span-8 min-w-0">
           <div class="flex items-end justify-between gap-6 mb-8 reveal">
             <div>
@@ -323,7 +282,7 @@
     </div>
 
     <!-- ============ PROPERTIES ============ -->
-    <section id="properties" class="max-w-7xl mx-auto px-4 sm:px-6 pt-4 pb-20 md:pb-24">
+    <section id="properties" class="wrap pt-4 pb-20 md:pb-24">
       <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-10 reveal">
         <div>
           <p class="eyebrow">For sale across Kerala</p>
@@ -337,15 +296,14 @@
         </div>
       </div>
       <div id="propertyGrid" data-stagger class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6" aria-live="polite"></div>
-      <div class="mt-12 flex flex-col sm:flex-row items-center justify-between gap-6">
-        <nav id="pager" class="pager" aria-label="Pagination"></nav>
+      <div class="mt-12 flex justify-center">
         <a href="properties.html" class="btn-primary">More Properties <span aria-hidden="true">→</span></a>
       </div>
     </section>
 
     <!-- ============ SURPLUS MATERIALS ============ -->
     <section class="bg-ink-800 text-white py-20 md:py-24">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="wrap">
         <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 reveal">
           <div class="max-w-3xl">
             <p class="eyebrow text-lagoon">Buy &amp; sell locally</p>
@@ -356,48 +314,34 @@
             <select id="materialDistrict" class="bg-transparent text-white text-sm font-medium py-2 pr-2 outline-none district-select dark-select" aria-label="Select district"><option value="">- Select District -</option></select>
           </label>
         </div>
-        <div id="materialGrid" data-stagger class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-5"></div>
+        <div id="materialGrid" data-stagger class="mat-grid"></div>
         <div class="mt-10 text-center">
           <a href="surplus.html" class="btn-outline-light">View More</a>
         </div>
       </div>
     </section>
 
-    <!-- ============ FEATURED APARTMENTS ============ -->
-    <section id="apartments" class="bg-ink text-white py-20 md:py-24 relative overflow-hidden">
-      <div class="absolute -top-40 -right-40 w-[500px] h-[500px] rounded-full bg-saffron/20 blur-[120px]" data-parallax="0.2"></div>
-      <div class="absolute -bottom-40 -left-40 w-[500px] h-[500px] rounded-full bg-lagoon/15 blur-[120px]" data-parallax="-0.15"></div>
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 relative">
-        <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 reveal">
-          <div>
-            <p class="eyebrow text-saffron">Ready to move</p>
-            <h2 class="section-title text-white">Featured Apartments</h2>
-          </div>
-          <div class="flex gap-3">
-            <button class="slider-btn" data-slider="aptTrack" data-dir="-1" aria-label="Previous">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg>
-            </button>
-            <button class="slider-btn" data-slider="aptTrack" data-dir="1" aria-label="Next">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
-            </button>
-          </div>
-        </div>
-        <div id="aptTrack" class="slider-track" data-stagger></div>
+    <!-- ============ FEATURED APARTMENTS (same design as villas) ============ -->
+    <section id="apartments" class="wrap pt-20 md:pt-24 pb-6">
+      <div class="text-center max-w-2xl mx-auto mb-12 reveal">
+        <p class="eyebrow">Ready to move</p>
+        <h2 class="section-title">Featured Apartments</h2>
       </div>
+      <div id="aptGrid" data-stagger class="zoom-grid"></div>
     </section>
 
     <!-- ============ FEATURED VILLAS ============ -->
-    <section id="villas" class="max-w-7xl mx-auto px-4 sm:px-6 py-20 md:py-24">
+    <section id="villas" class="wrap py-20 md:py-24">
       <div class="text-center max-w-2xl mx-auto mb-12 reveal">
         <p class="eyebrow">Private living</p>
         <h2 class="section-title">Featured Villas</h2>
       </div>
-      <div id="villaGrid" data-stagger class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-5"></div>
+      <div id="villaGrid" data-stagger class="zoom-grid"></div>
     </section>
 
     <!-- ============ FEATURED BUILDERS ============ -->
     <section id="builders" class="bg-white border-y border-ink/5 py-20 md:py-24">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="wrap">
         <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 reveal">
           <div>
             <p class="eyebrow">Directory</p>
@@ -411,7 +355,7 @@
     </section>
 
     <!-- ============ CTA: LIST / ADVERTISE ============ -->
-    <section id="list-property" class="max-w-7xl mx-auto px-4 sm:px-6 py-20 grid lg:grid-cols-2 gap-6">
+    <section id="list-property" class="wrap py-20 grid lg:grid-cols-2 gap-6">
       <div class="cta-card bg-saffron text-white" data-anim="left">
         <div class="relative z-10">
           <p class="uppercase tracking-[0.2em] text-xs font-bold text-white/80">For owners &amp; agents</p>
@@ -432,7 +376,7 @@
     </section>
 
     <!-- ============ NEWSLETTER ============ -->
-    <section id="newsletter" class="max-w-7xl mx-auto px-4 sm:px-6 pb-24">
+    <section id="newsletter" class="wrap pb-24">
       <div class="rounded-[2rem] bg-white border border-ink/5 shadow-soft p-8 md:p-14 grid md:grid-cols-2 gap-8 items-center" data-anim="zoom">
         <div>
           <p class="eyebrow">Subscribe</p>
@@ -550,7 +494,7 @@
     <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24"><path d="m18 15-6-6-6 6"/></svg>
   </button>
 
-  <!-- ============ POPUP AD (800 × 450, every 30 s) ============ -->
+  <!-- ============ POPUP AD (800 × 450, at most once every 5 minutes) ============ -->
   <div id="promoPopup" class="popup" role="dialog" aria-modal="true" aria-label="Advertisement" aria-hidden="true">
     <div class="popup-overlay" data-popup-close></div>
     <div class="popup-box">
