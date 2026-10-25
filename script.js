@@ -304,17 +304,25 @@ function renderProperties() {
 }
 
 function renderMaterials(district = '') {
-  const list = SURPLUS.filter(m => !district || m.district === district);
+  // same card design as Properties; homepage shows the first 9 — the rest are on "View More"
+  const list = SURPLUS.filter(m => !district || m.district === district).slice(0, 9);
   $('#materialGrid').innerHTML = list.length ? list.map((m, i) => `
-    <a href="#" class="mat-card group" style="--i:${i}">
-      <div class="aspect-square overflow-hidden">${imgTag(m.img, m.name, 'w-full h-full object-cover group-hover:scale-105 transition duration-700', 500)}</div>
-      <div class="p-4 md:p-5">
-        <h3 class="font-semibold">${m.name}</h3>
-        <p class="mt-1 text-xs text-white/55 leading-relaxed">Good condition, available for quick sale.</p>
-        <p class="mt-3 text-[11px] uppercase tracking-[0.14em] text-lagoon flex items-center gap-1.5"><span class="w-3.5 h-3.5">${ICONS.pin}</span>${m.district}</p>
+    <article class="prop-card" style="--i:${i}">
+      <div class="prop-media">
+        ${imgTag(m.img, m.name, undefined, 700)}
+        <button class="fav-btn absolute top-4 right-4" aria-label="Save item">${ICONS.heart}</button>
       </div>
-    </a>`).join('')
-    : `<p class="col-span-full text-center text-white/50 py-10">No items in this district yet.</p>`;
+      <div class="p-6">
+        <h3 class="font-display text-lg">${m.name}</h3>
+        <dl class="mt-4 grid gap-2.5 text-sm">
+          <div class="prop-row"><dt>${ICONS.pin}Location</dt><dd>${m.district}</dd></div>
+          <div class="prop-row"><dt>${ICONS.tag}Condition</dt><dd class="text-saffron-600">Good condition</dd></div>
+          <div class="prop-row"><dt>${ICONS.area}Availability</dt><dd>Quick sale</dd></div>
+        </dl>
+        <a href="#" class="mt-6 flex items-center justify-center gap-2 h-11 rounded-full border border-ink/10 font-semibold text-sm hover:bg-ink hover:text-white hover:border-ink transition">View More <span aria-hidden="true">→</span></a>
+      </div>
+    </article>`).join('')
+    : `<p class="col-span-full text-center text-mist-500 py-10">No items in this district yet.</p>`;
 }
 
 const zoomCard = (x, kind, id, i, dark) => `

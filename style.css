@@ -1366,3 +1366,7 @@ button.dir-tag:hover { background: var(--ink); }
 @media (min-width: 768px)  { .mat-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; } }
 @media (min-width: 1100px) { .mat-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 18px; } }
 .mat-grid .mat-card h3 { font-size: 1.02rem; }
+
+/* Buy & sell locally — own full-width background (light brand blue) */
+.surplus-band { background: #FAF8F4; border-top: 1px solid rgba(13, 23, 32, .08); }
+.surplus-band .select-pill { background-color: #fff; }

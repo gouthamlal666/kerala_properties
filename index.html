@@ -301,23 +301,20 @@
       </div>
     </section>
 
-    <!-- ============ SURPLUS MATERIALS ============ -->
-    <section class="bg-ink-800 text-white py-20 md:py-24">
-      <div class="wrap">
-        <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 reveal">
-          <div class="max-w-3xl">
-            <p class="eyebrow text-lagoon">Buy &amp; sell locally</p>
-            <h2 class="section-title text-white" style="font-size:clamp(1.75rem,3vw,2.5rem)">Surplus and Used Building Materials / Household Items for sale</h2>
-          </div>
-          <label class="flex items-center gap-3 bg-white/5 border border-white/10 rounded-full pl-5 pr-2 py-1.5 shrink-0">
-            <svg class="w-4 h-4 text-lagoon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11a7 7 0 1 1 14 0c0 4.8-7 11-7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg>
-            <select id="materialDistrict" class="bg-transparent text-white text-sm font-medium py-2 pr-2 outline-none district-select dark-select" aria-label="Select district"><option value="">- Select District -</option></select>
-          </label>
+    <!-- ============ SURPLUS MATERIALS (same design as Properties) ============ -->
+    <section id="surplus" class="surplus-band">
+      <div class="wrap py-20 md:py-24">
+      <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-10 reveal">
+        <div class="max-w-3xl">
+          <p class="eyebrow">Buy &amp; sell locally</p>
+          <h2 class="section-title">Surplus and Used Building Materials / Household Items for sale</h2>
         </div>
-        <div id="materialGrid" data-stagger class="mat-grid"></div>
-        <div class="mt-10 text-center">
-          <a href="surplus.html" class="btn-outline-light">View More</a>
-        </div>
+        <select id="materialDistrict" class="select-pill district-select shrink-0" aria-label="Select district"><option value="">- Select District -</option></select>
+      </div>
+      <div id="materialGrid" data-stagger class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6" aria-live="polite"></div>
+      <div class="mt-12 flex justify-center">
+        <a href="surplus.html" class="btn-primary">View More <span aria-hidden="true">→</span></a>
+      </div>
       </div>
     </section>
 
