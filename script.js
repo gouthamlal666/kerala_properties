@@ -135,7 +135,11 @@ const APARTMENTS = [
   { name: 'Alukkas Tower', loc: 'Bheema Palli, Thiruvananthapuram', img: '1493809842364-78817add7ffb' },
   { name: 'Creek Rocks', loc: 'Munnar, Idukki', img: '1574362848149-11496d93a7c7' },
   { name: 'Kalyan Towers', loc: 'Pala, Kottayam', img: '1567496898669-ee935f5f647a' },
-  { name: 'Sinar Tower', loc: 'Kotaykkal, Kozhikode', img: '1486406146926-c627a92ad1ab' }
+  { name: 'Sinar Tower', loc: 'Kotaykkal, Kozhikode', img: '1486406146926-c627a92ad1ab' },
+  // sample entries so the grid fills two full rows — replace with real listings
+  { name: 'Marine Crest', loc: 'Marine Drive, Kochi', img: '1522708323590-d24dbb6b0267' },
+  { name: 'Palm Meadows', loc: 'Kakkanad, Kochi', img: '1600607687939-ce8a6c25118c' },
+  { name: 'Riverside Residency', loc: 'Kumarakom, Kottayam', img: '1512918728675-ed5a9ecdebfd' }
 ];
 
 // Featured villas
@@ -244,11 +248,36 @@ function renderTopAds() {
     </a>`).join('');
 }
 
-function renderPremiumAds() {
-  $('#premAds').innerHTML = PREMIUM_ADS.map((photo, i) => `
+function renderPremiumAds(count = PREMIUM_ADS.length) {
+  const list = $('#premAds');
+  if (list.children.length === count) return;
+  list.innerHTML = Array.from({ length: count }, (_, i) => PREMIUM_ADS[i % PREMIUM_ADS.length]).map((photo, i) => `
     <a href="#advertise" class="ad-box ad-premium" aria-label="Premium property advertisement ${i + 1}">
       ${imgTag(photo, `Premium property advertisement ${i + 1}`, '', 700)}
     </a>`).join('');
+}
+
+// Desktop: show only as many 300 × 250 ads as fit beside the news column, so both end level.
+// Tablet/phone (ads sit below the news): show them all.
+function fitPremiumAds() {
+  const list = $('#premAds');
+  if (!list) return;
+  if (!window.matchMedia('(min-width: 1024px)').matches) {
+    renderPremiumAds(PREMIUM_ADS.length);
+    [...list.children].forEach(a => { a.style.aspectRatio = ''; a.style.height = ''; });
+    return;
+  }
+  // where the news content really ends (the grid row itself stretches to the taller column)
+  const newsEnd = $('#newsGrid').parentElement.lastElementChild.getBoundingClientRect().bottom;
+  const listTop = list.getBoundingClientRect().top;
+  const gap = parseFloat(getComputedStyle(list).rowGap) || 20;
+  const adH = list.getBoundingClientRect().width * 250 / 300;   // natural 300 × 250 height
+  const room = newsEnd - listTop;
+  const n = Math.max(1, Math.round((room + gap) / (adH + gap)));
+  renderPremiumAds(n);
+  // share the space evenly so the column ends level with the news (stays close to 300 × 250)
+  const h = Math.max(120, (room - (n - 1) * gap) / n);
+  [...list.children].forEach(a => { a.style.aspectRatio = 'auto'; a.style.height = `${h}px`; });
 }
 
 function renderNews() {
@@ -792,6 +821,11 @@ document.addEventListener('DOMContentLoaded', () => {
     renderNews();
     initSponsored();
     renderPremiumAds();
+    requestAnimationFrame(fitPremiumAds);
+    window.addEventListener('load', fitPremiumAds);
+    if (document.fonts) document.fonts.ready.then(fitPremiumAds);
+    let fitTimer;
+    window.addEventListener('resize', () => { clearTimeout(fitTimer); fitTimer = setTimeout(fitPremiumAds, 150); });
     renderProperties();
     renderMaterials();
     renderApartments();

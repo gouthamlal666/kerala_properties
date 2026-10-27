@@ -1353,7 +1353,7 @@ button.dir-tag:hover { background: var(--ink); }
    ========================================================= */
 .zoom-grid { --cols: 2; --gap: 12px; display: flex; flex-wrap: wrap; justify-content: center; gap: 28px var(--gap); }
 .zoom-grid > * { flex: 0 0 calc((100% - (var(--cols) - 1) * var(--gap)) / var(--cols)); min-width: 0; }
-@media (min-width: 768px)  { .zoom-grid { --cols: 3; --gap: 16px; } }
+@media (min-width: 768px)  { .zoom-grid { --cols: 2; --gap: 16px; } }   /* 10 cards → full rows of 2 */
 @media (min-width: 1100px) { .zoom-grid { --cols: 5; --gap: 18px; } }
 .zoom-grid .zoom-card h3 { font-size: 1.15rem; margin-top: 1rem; }
 
