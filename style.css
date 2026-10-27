@@ -1370,3 +1370,60 @@ button.dir-tag:hover { background: var(--ink); }
 /* Buy & sell locally — own full-width background (light brand blue) */
 .surplus-band { background: #FAF8F4; border-top: 1px solid rgba(13, 23, 32, .08); }
 .surplus-band .select-pill { background-color: #fff; }
+
+/* =========================================================
+   Slim search bar (Status · District · Location Type · Location · Type · Search)
+   ========================================================= */
+.qsearch-band { position: relative; isolation: isolate; margin-top: 18px;
+  background: linear-gradient(90deg, rgba(13, 23, 32, .94), rgba(13, 23, 32, .8)),
+              url("https://images.unsplash.com/photo-1593693397690-362cb9666fc2?w=2000&q=60&auto=format&fit=crop") center 60% / cover no-repeat; }
+.qsearch {
+  position: relative;
+  display: grid; grid-template-columns: 1fr; gap: 6px;
+  background: rgba(255, 255, 255, .06);
+  border: 1px solid rgba(255, 255, 255, .14);
+}
+.qsearch::before { content: ""; position: absolute; left: 0; top: -1px; width: 110px; height: 2px; background: var(--saffron); }
+@media (min-width: 640px)  { .qsearch { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1100px) { .qsearch { grid-template-columns: auto repeat(4, minmax(0, 1fr)) auto; gap: 0; } }
+.qs { position: relative; display: flex; flex-direction: column; justify-content: center; min-width: 0; margin: 0; padding: .55rem 1rem; border: 0; }
+@media (min-width: 1100px) { .qs + .qs::before { content: ""; position: absolute; left: 0; top: 24%; bottom: 24%; width: 1px; background: rgba(255, 255, 255, .14); } }
+.qs-label { padding: 0; font-size: .62rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: rgba(255, 255, 255, .55); }
+.qs-input {
+  width: 100%; min-width: 0; margin-top: .15rem;
+  appearance: none; background: transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-opacity='.75' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right center / 14px;
+  color: #fff; font-weight: 600; font-size: .92rem; padding: .15rem 1.3rem .1rem 0; outline: none; cursor: pointer; text-overflow: ellipsis;
+}
+.qs-input option { color: var(--ink); background: #fff; }
+input.qs-input { background-image: none; cursor: text; padding-right: 0; }
+input.qs-input::placeholder { color: rgba(255, 255, 255, .45); font-weight: 500; }
+.status-toggle { display: inline-flex; margin-top: .3rem; border: 1px solid rgba(255, 255, 255, .22); width: max-content; }
+.status-toggle label { cursor: pointer; }
+.status-toggle input { position: absolute; opacity: 0; pointer-events: none; }
+.status-toggle span { display: block; padding: .3rem .95rem; font-size: .85rem; font-weight: 700; color: rgba(255, 255, 255, .72); transition: background .2s, color .2s; }
+.status-toggle input:checked + span { background: var(--saffron); color: #fff; }
+.status-toggle input:focus-visible + span { outline: 2px solid #fff; outline-offset: -2px; }
+.qs-go {
+  display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
+  min-height: 52px; padding: 0 1.75rem;
+  background: linear-gradient(135deg, #ff9a2e, var(--saffron) 55%, #e86a00);
+  color: #fff; font-weight: 700; white-space: nowrap; transition: filter .2s;
+}
+.qs-go:hover { filter: brightness(1.06); }
+@media (min-width: 640px) and (max-width: 1099px) { .qs-go { grid-column: 1 / -1; } }
+@media (min-width: 1100px) { .qs-go { margin: 6px; } }
+
+/* =========================================================
+   Latest updates: Most Recent News | Sponsored Content
+   ========================================================= */
+.news-head { margin-bottom: 1rem; font-family: 'Open Sans', system-ui, sans-serif; font-weight: 800; font-size: clamp(1.2rem, 1.6vw, 1.45rem); letter-spacing: .04em; text-transform: uppercase; color: #4a4f52; }
+.news-badge, .spons-badge { display: inline-block; padding: .35rem .7rem; font-size: .62rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+.news-badge { background: var(--saffron); color: #fff; }
+.spons-badge { background: #fff; color: var(--ink); }
+.spons-slider--fill { flex: 1; aspect-ratio: auto; min-height: 320px; }
+@media (max-width: 1023px) { .spons-slider--fill { aspect-ratio: 16 / 9; min-height: 0; } }
+
+/* Buy & sell locally — dark band, district pill */
+.dark-select-pill { display: inline-flex; align-items: center; gap: .6rem; padding: .35rem .5rem .35rem 1rem; background: rgba(255, 255, 255, .05); border: 1px solid rgba(255, 255, 255, .14); }
+.dark-select-pill select { background: transparent; color: #fff; border: 0; font-size: .9rem; font-weight: 600; padding: .45rem .4rem; outline: none; cursor: pointer; color-scheme: dark; }
+.dark-select-pill select option { color: var(--ink); background: #fff; }

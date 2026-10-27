@@ -36,6 +36,32 @@ const HERO_SLIDES = [
 ];
 const HERO_DURATION = 6000;
 
+/* ---------------- Search form data ---------------- */
+// Corporations & municipalities per district. Panchayats are typed in —
+// load them from the backend when it is ready.
+const LOCATIONS = {
+  Alappuzha:          { Corporation: [], Municipality: ['Alappuzha', 'Chengannur', 'Cherthala', 'Haripad', 'Kayamkulam', 'Mavelikkara'] },
+  Ernakulam:          { Corporation: ['Kochi'], Municipality: ['Aluva', 'Angamaly', 'Eloor', 'Kalamassery', 'Koothattukulam', 'Kothamangalam', 'Maradu', 'Muvattupuzha', 'North Paravur', 'Perumbavoor', 'Piravom', 'Thrikkakara', 'Thripunithura'] },
+  Idukki:             { Corporation: [], Municipality: ['Kattappana', 'Thodupuzha'] },
+  Kannur:             { Corporation: ['Kannur'], Municipality: ['Anthoor', 'Iritty', 'Kuthuparamba', 'Mattannur', 'Panoor', 'Payyanur', 'Sreekandapuram', 'Taliparamba', 'Thalassery'] },
+  Kasaragod:          { Corporation: [], Municipality: ['Kanhangad', 'Kasaragod', 'Nileshwaram'] },
+  Kollam:             { Corporation: ['Kollam'], Municipality: ['Karunagappally', 'Kottarakkara', 'Paravur', 'Punalur'] },
+  Kottayam:           { Corporation: [], Municipality: ['Changanassery', 'Erattupetta', 'Ettumanoor', 'Kottayam', 'Pala', 'Vaikom'] },
+  Kozhikode:          { Corporation: ['Kozhikode'], Municipality: ['Feroke', 'Koduvally', 'Koyilandy', 'Mukkam', 'Payyoli', 'Ramanattukara', 'Vatakara'] },
+  Malappuram:         { Corporation: [], Municipality: ['Kondotty', 'Kottakkal', 'Malappuram', 'Manjeri', 'Nilambur', 'Parappanangadi', 'Perinthalmanna', 'Ponnani', 'Tanur', 'Tirur', 'Tirurangadi', 'Valanchery'] },
+  Palakkad:           { Corporation: [], Municipality: ['Cherpulassery', 'Chittur-Thathamangalam', 'Mannarkkad', 'Ottapalam', 'Palakkad', 'Pattambi', 'Shoranur'] },
+  Pathanamthitta:     { Corporation: [], Municipality: ['Adoor', 'Pandalam', 'Pathanamthitta', 'Thiruvalla'] },
+  Thiruvananthapuram: { Corporation: ['Thiruvananthapuram'], Municipality: ['Attingal', 'Nedumangad', 'Neyyattinkara', 'Varkala'] },
+  Thrissur:           { Corporation: ['Thrissur'], Municipality: ['Chalakudy', 'Chavakkad', 'Guruvayur', 'Irinjalakuda', 'Kodungallur', 'Kunnamkulam', 'Wadakkanchery'] },
+  Wayanad:            { Corporation: [], Municipality: ['Kalpetta', 'Mananthavady', 'Sulthan Bathery'] }
+};
+const PROPERTY_TYPE_OPTIONS = [
+  'Apartments', 'Bar', 'Building Floor', 'Café', 'Commercial Building', 'Commercial Land', 'Commercial Properties',
+  'Estate and Plantation', 'Farm House', 'Farm Land', 'Flat', 'Godown / Warehouse', 'House', 'House Plot',
+  'Industrial / Manufacturing', 'Office Space', 'PG / Hostel', 'Residential Land', 'Resort', 'School / College',
+  'Shop / Showroom', 'Store', 'Villa'
+];
+
 // Top ad strip — 6 static ads, height 120
 const TOP_ADS = [
   { name: 'Logistics', img: '1586528116311-ad8dd3c8310d' },
@@ -249,34 +275,60 @@ function initSponsored() {
   const dots = $('#sponsDots');
   slider.innerHTML = SPONSORED.map((s, i) => `
     <a href="#" class="spons-slide${i ? '' : ' is-on'}" aria-hidden="${i ? 'true' : 'false'}">
-      ${imgTag(s.img, s.title, 'absolute inset-0 w-full h-full object-cover', 1200)}
+      ${imgTag(s.img, s.title, 'absolute inset-0 w-full h-full object-cover', 1400)}
+      <div class="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/35 to-transparent"></div>
+      <span class="absolute top-4 left-4 spons-badge">CN Premium Articles</span>
+      <div class="absolute bottom-0 left-0 p-6 md:p-8 text-white max-w-2xl">
+        <h4 class="font-display text-2xl md:text-[2rem] leading-tight">${s.title}</h4>
+        <p class="mt-2 text-white/80 md:text-lg">${s.text}</p>
+      </div>
     </a>`).join('');
   dots.innerHTML = SPONSORED.map((_, i) => `<button class="spons-dot${i ? '' : ' is-on'}" data-i="${i}" aria-label="Slide ${i + 1}"></button>`).join('');
 
-  const cap = $('#sponsCaption');
-  const caption = i => {
-    cap.classList.add('is-swapping');
-    setTimeout(() => {
-      $('#sponsTitle').textContent = SPONSORED[i].title;
-      $('#sponsText').textContent = SPONSORED[i].text;
-      cap.classList.remove('is-swapping');
-    }, 250);
-  };
   let cur = 0, timer;
-  caption(0);
   const go = n => {
     const slides = $$('.spons-slide', slider), ds = $$('.spons-dot', dots);
     slides[cur].classList.remove('is-on'); slides[cur].setAttribute('aria-hidden', 'true'); ds[cur].classList.remove('is-on');
     cur = (n + slides.length) % slides.length;
     slides[cur].classList.add('is-on'); slides[cur].setAttribute('aria-hidden', 'false'); ds[cur].classList.add('is-on');
-    caption(cur);
   };
+  // advances on its own — no click needed
   const auto = () => { clearInterval(timer); timer = setInterval(() => go(cur + 1), 4500); };
   $$('.spons-btn').forEach(b => b.addEventListener('click', () => { go(cur + Number(b.dataset.spons)); auto(); }));
   dots.addEventListener('click', e => { const b = e.target.closest('.spons-dot'); if (b) { go(Number(b.dataset.i)); auto(); } });
   slider.addEventListener('mouseenter', () => clearInterval(timer));
   slider.addEventListener('mouseleave', auto);
   auto();
+}
+
+/* ---------------- Slim search: status · district · location type · location · type ---------------- */
+function initSearch() {
+  const form = $('#searchForm');
+  if (!form || !$('#sfDistrict')) return;
+  const district = $('#sfDistrict'), locType = $('#sfLocType'), location = $('#sfLocation'), panchayat = $('#sfPanchayat');
+  const opts = list => list.map(v => `<option value="${v}">${v}</option>`).join('');
+  district.insertAdjacentHTML('beforeend', opts(Object.keys(LOCATIONS)));      // alphabetical
+  $('#sfType').insertAdjacentHTML('beforeend', opts(PROPERTY_TYPE_OPTIONS));
+
+  const update = () => {
+    const d = district.value, t = locType.value, isP = t === 'Panchayat';
+    location.classList.toggle('hidden', isP);
+    panchayat.classList.toggle('hidden', !isP);
+    if (isP) return;
+    const items = !d ? [] : t ? LOCATIONS[d][t] : [...LOCATIONS[d].Corporation, ...LOCATIONS[d].Municipality];
+    const first = !d ? '- Select district first -' : items.length ? '- Select -' : `No ${t.toLowerCase()} in ${d}`;
+    location.innerHTML = `<option value="">${first}</option>${opts(items)}`;
+  };
+  district.addEventListener('change', update);
+  locType.addEventListener('change', update);
+  update();
+
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    const where = (locType.value === 'Panchayat' ? panchayat.value.trim() : location.value) || district.value || 'all districts';
+    const what = form.type.value || 'properties';
+    showToast(`Searching ${what.toLowerCase()} for ${form.status.value.toLowerCase()} in ${where}…`);
+  });
 }
 
 let propFilter = 'all';
@@ -304,25 +356,17 @@ function renderProperties() {
 }
 
 function renderMaterials(district = '') {
-  // same card design as Properties; homepage shows the first 9 — the rest are on "View More"
-  const list = SURPLUS.filter(m => !district || m.district === district).slice(0, 9);
+  const list = SURPLUS.filter(m => !district || m.district === district);
   $('#materialGrid').innerHTML = list.length ? list.map((m, i) => `
-    <article class="prop-card" style="--i:${i}">
-      <div class="prop-media">
-        ${imgTag(m.img, m.name, undefined, 700)}
-        <button class="fav-btn absolute top-4 right-4" aria-label="Save item">${ICONS.heart}</button>
+    <a href="#" class="mat-card group" style="--i:${i}">
+      <div class="aspect-square overflow-hidden">${imgTag(m.img, m.name, 'w-full h-full object-cover group-hover:scale-105 transition duration-700', 600)}</div>
+      <div class="p-4 md:p-5">
+        <h3 class="font-semibold">${m.name}</h3>
+        <p class="mt-1 text-xs text-white/55 leading-relaxed">Good condition, available for quick sale.</p>
+        <p class="mt-3 text-[11px] uppercase tracking-[0.14em] text-lagoon flex items-center gap-1.5"><span class="w-3.5 h-3.5">${ICONS.pin}</span>${m.district}</p>
       </div>
-      <div class="p-6">
-        <h3 class="font-display text-lg">${m.name}</h3>
-        <dl class="mt-4 grid gap-2.5 text-sm">
-          <div class="prop-row"><dt>${ICONS.pin}Location</dt><dd>${m.district}</dd></div>
-          <div class="prop-row"><dt>${ICONS.tag}Condition</dt><dd class="text-saffron-600">Good condition</dd></div>
-          <div class="prop-row"><dt>${ICONS.area}Availability</dt><dd>Quick sale</dd></div>
-        </dl>
-        <a href="#" class="mt-6 flex items-center justify-center gap-2 h-11 rounded-full border border-ink/10 font-semibold text-sm hover:bg-ink hover:text-white hover:border-ink transition">View More <span aria-hidden="true">→</span></a>
-      </div>
-    </article>`).join('')
-    : `<p class="col-span-full text-center text-mist-500 py-10">No items in this district yet.</p>`;
+    </a>`).join('')
+    : `<p class="col-span-full text-center text-white/50 py-10">No items in this district yet.</p>`;
 }
 
 const zoomCard = (x, kind, id, i, dark) => `
@@ -424,13 +468,6 @@ function initFavourites() {
 }
 
 function initForms() {
-  $('#searchForm').addEventListener('submit', e => {
-    e.preventDefault();
-    const district = e.target.district.value || 'all districts';
-    const mode = $('.search-tab.is-active').textContent;
-    showToast(`Searching ${mode.toLowerCase()} in ${district}…`);
-  });
-
   $('#newsletterForm').addEventListener('submit', e => {
     e.preventDefault();
     const input = e.target.querySelector('input');
@@ -761,6 +798,7 @@ document.addEventListener('DOMContentLoaded', () => {
     renderVillas();
     renderBuilders();
     initTabs();
+    initSearch();
     initSlider();
     initForms();
     initDistrictBand();
