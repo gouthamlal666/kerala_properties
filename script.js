@@ -253,38 +253,38 @@ function renderPremiumAds(count = PREMIUM_ADS.length) {
   if (list.children.length === count) return;
   list.innerHTML = Array.from({ length: count }, (_, i) => PREMIUM_ADS[i % PREMIUM_ADS.length]).map((photo, i) => `
     <a href="#advertise" class="ad-box ad-premium" aria-label="Premium property advertisement ${i + 1}">
-      ${imgTag(photo, `Premium property advertisement ${i + 1}`, '', 700)}
+      <img src="${img(photo, 700)}" alt="Premium property advertisement ${i + 1}" />
     </a>`).join('');
 }
 
-// Desktop: show only as many 300 × 250 ads as fit beside the news column, so both end level.
-// Tablet/phone (ads sit below the news): show them all.
+// Always 6 premium ads (300 × 250). On desktop, news rows are added beside them
+// until the news column reaches the bottom of the ads, so neither side leaves a gap.
 function fitPremiumAds() {
   const list = $('#premAds');
   if (!list) return;
-  if (!window.matchMedia('(min-width: 1024px)').matches) {
-    renderPremiumAds(PREMIUM_ADS.length);
-    [...list.children].forEach(a => { a.style.aspectRatio = ''; a.style.height = ''; });
-    return;
-  }
-  // where the news content really ends (the grid row itself stretches to the taller column)
-  const newsEnd = $('#newsGrid').parentElement.lastElementChild.getBoundingClientRect().bottom;
-  const listTop = list.getBoundingClientRect().top;
-  const gap = parseFloat(getComputedStyle(list).rowGap) || 20;
-  const adH = list.getBoundingClientRect().width * 250 / 300;   // natural 300 × 250 height
-  const room = newsEnd - listTop;
-  const n = Math.max(1, Math.round((room + gap) / (adH + gap)));
-  renderPremiumAds(n);
-  // share the space evenly so the column ends level with the news (stays close to 300 × 250)
-  const h = Math.max(120, (room - (n - 1) * gap) / n);
-  [...list.children].forEach(a => { a.style.aspectRatio = 'auto'; a.style.height = `${h}px`; });
+  renderPremiumAds(PREMIUM_ADS.length);
+  const grid = $('#newsGrid');
+  if (!window.matchMedia('(min-width: 1024px)').matches) { renderNews(3); return; }
+  const adsEnd = () => list.getBoundingClientRect().bottom;
+  const newsEnd = () => grid.parentElement.lastElementChild.getBoundingClientRect().bottom;
+  let rows = 3;
+  renderNews(rows);
+  while (newsEnd() < adsEnd() - 40 && rows < 12) renderNews(++rows);
+  // if the last row overshoots by more than half a row, drop it
+  const overshoot = newsEnd() - adsEnd();
+  const rowH = grid.firstElementChild ? grid.firstElementChild.getBoundingClientRect().height : 0;
+  if (rows > 3 && overshoot > rowH / 2) renderNews(--rows);
+  [...list.children].forEach(a => { a.style.aspectRatio = ''; a.style.height = ''; });
 }
 
-function renderNews() {
+function renderNews(rows = 3) {
+  const grid = $('#newsGrid');
+  if (grid.dataset.rows === String(rows)) return;
+  grid.dataset.rows = rows;
   let html = '';
-  for (let r = 0; r < 3; r++) {
+  for (let r = 0; r < rows; r++) {
     NEWS_HEADS.forEach((n, c) => {
-      const photo = r === 1 ? NEWS_ALT_IMGS[c] : n.img;
+      const photo = r % 2 === 1 ? NEWS_ALT_IMGS[c] : n.img;
       html += `
       <article class="news-card group">
         <a href="#">
