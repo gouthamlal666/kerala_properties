@@ -243,34 +243,26 @@
             <div class="mt-10 text-center">
               <a href="news.html" class="btn-ghost">More News »</a>
             </div>
+
+            <!-- ============ PROPERTIES (left column, beside Premium Properties) ============ -->
+            <div id="properties" class="pt-16">
+              <div class="mb-8 reveal">
+                <p class="eyebrow">For sale across Kerala</p>
+                <h2 class="section-title">Properties</h2>
+              </div>
+              <div id="propertyGrid" data-stagger class="grid sm:grid-cols-2 xl:grid-cols-3 gap-5" aria-live="polite"></div>
+              <div class="mt-10 flex justify-center">
+                <a href="properties.html" class="btn-primary">More Properties <span aria-hidden="true">→</span></a>
+              </div>
+            </div>
           </div>
 
-          <!-- Premium properties (ad slots) -->
+          <!-- Premium properties (ad slots) — runs down beside news and properties -->
           <aside class="lg:col-span-4">
             <h2 class="news-head reveal">Premium Properties</h2>
             <div id="premAds" class="grid sm:grid-cols-2 lg:grid-cols-1 gap-5" data-stagger></div>
           </aside>
         </div>
-      </div>
-    </section>
-
-    <!-- ============ PROPERTIES ============ -->
-    <section id="properties" class="wrap pt-4 pb-20 md:pb-24">
-      <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-10 reveal">
-        <div>
-          <p class="eyebrow">For sale across Kerala</p>
-          <h2 class="section-title">Properties</h2>
-        </div>
-        <div id="propertyFilters" class="flex flex-wrap gap-2">
-          <button class="filter-chip is-active" data-filter="all">All</button>
-          <button class="filter-chip" data-filter="House for Sale">Houses</button>
-          <button class="filter-chip" data-filter="Land for Sale">Land</button>
-          <button class="filter-chip" data-filter="Farmhouse for Sale">Farmhouses</button>
-        </div>
-      </div>
-      <div id="propertyGrid" data-stagger class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6" aria-live="polite"></div>
-      <div class="mt-12 flex justify-center">
-        <a href="properties.html" class="btn-primary">More Properties <span aria-hidden="true">→</span></a>
       </div>
     </section>
 
@@ -304,12 +296,14 @@
     </section>
 
     <!-- ============ FEATURED VILLAS ============ -->
-    <section id="villas" class="wrap py-20 md:py-24">
-      <div class="text-center max-w-2xl mx-auto mb-12 reveal">
-        <p class="eyebrow">Private living</p>
-        <h2 class="section-title">Featured Villas</h2>
+    <section id="villas" class="bg-ink-800 text-white py-20 md:py-24">
+      <div class="wrap">
+        <div class="text-center max-w-2xl mx-auto mb-12 reveal">
+          <p class="eyebrow text-lagoon justify-center">Private living</p>
+          <h2 class="section-title text-white">Featured Villas</h2>
+        </div>
+        <div id="villaGrid" data-stagger class="zoom-grid"></div>
       </div>
-      <div id="villaGrid" data-stagger class="zoom-grid"></div>
     </section>
 
     <!-- ============ FEATURED BUILDERS ============ -->

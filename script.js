@@ -257,24 +257,24 @@ function renderPremiumAds(count = PREMIUM_ADS.length) {
     </a>`).join('');
 }
 
-// Always 6 premium ads (300 × 250). On desktop, news rows are added beside them
-// until the news column reaches the bottom of the ads, so neither side leaves a gap.
+// Premium ads (300 × 250) run down the right-hand column beside the news and the
+// properties: as many as fit (never fewer than 6), repeating the six photos.
 function fitPremiumAds() {
   const list = $('#premAds');
   if (!list) return;
-  renderPremiumAds(PREMIUM_ADS.length);
-  const grid = $('#newsGrid');
-  if (!window.matchMedia('(min-width: 1024px)').matches) { renderNews(3); return; }
-  const adsEnd = () => list.getBoundingClientRect().bottom;
-  const newsEnd = () => grid.parentElement.lastElementChild.getBoundingClientRect().bottom;
-  let rows = 3;
-  renderNews(rows);
-  while (newsEnd() < adsEnd() - 40 && rows < 12) renderNews(++rows);
-  // if the last row overshoots by more than half a row, drop it
-  const overshoot = newsEnd() - adsEnd();
-  const rowH = grid.firstElementChild ? grid.firstElementChild.getBoundingClientRect().height : 0;
-  if (rows > 3 && overshoot > rowH / 2) renderNews(--rows);
-  [...list.children].forEach(a => { a.style.aspectRatio = ''; a.style.height = ''; });
+  renderNews(3);
+  const reset = () => [...list.children].forEach(a => { a.style.aspectRatio = ''; a.style.height = ''; });
+  if (!window.matchMedia('(min-width: 1024px)').matches) { renderPremiumAds(PREMIUM_ADS.length); reset(); return; }
+  const leftEnd = $('#properties').getBoundingClientRect().bottom;
+  const gap = parseFloat(getComputedStyle(list).rowGap) || 20;
+  const adH = list.getBoundingClientRect().width * 250 / 300;
+  const room = leftEnd - list.getBoundingClientRect().top;
+  const n = Math.max(PREMIUM_ADS.length, Math.floor((room + gap) / (adH + gap)));
+  renderPremiumAds(n);
+  // share the leftover space so the column ends level with the properties
+  const h = (room - (n - 1) * gap) / n;
+  if (h >= adH) [...list.children].forEach(a => { a.style.aspectRatio = 'auto'; a.style.height = `${h}px`; });
+  else reset();
 }
 
 function renderNews(rows = 3) {
@@ -410,7 +410,7 @@ function renderApartments() {
 }
 
 function renderVillas() {
-  $('#villaGrid').innerHTML = VILLAS.map((v, i) => zoomCard(v, 'villa', i + 1, i, false)).join('');
+  $('#villaGrid').innerHTML = VILLAS.map((v, i) => zoomCard(v, 'villa', i + 1, i, true)).join('');
 }
 
 function renderBuilders(district = '') {
@@ -460,14 +460,6 @@ function initTabs() {
     tab.classList.add('is-active');
   }));
 
-  // Property type filters + pagination
-  $$('#propertyFilters .filter-chip').forEach(chip => chip.addEventListener('click', () => {
-    $$('#propertyFilters .filter-chip').forEach(c => c.classList.remove('is-active'));
-    chip.classList.add('is-active');
-    propFilter = chip.dataset.filter;
-    propPage = 1;
-    renderProperties();
-  }));
   $('#materialDistrict').addEventListener('change', e => renderMaterials(e.target.value));
   $('#builderDistrict').addEventListener('change', e => renderBuilders(e.target.value));
 }
