@@ -303,14 +303,9 @@ function initSponsored() {
   const slider = $('#sponsSlider');
   const dots = $('#sponsDots');
   slider.innerHTML = SPONSORED.map((s, i) => `
-    <a href="#" class="spons-slide${i ? '' : ' is-on'}" aria-hidden="${i ? 'true' : 'false'}">
+    <a href="#" class="spons-slide${i ? '' : ' is-on'}" aria-hidden="${i ? 'true' : 'false'}" aria-label="${s.title}">
       ${imgTag(s.img, s.title, 'absolute inset-0 w-full h-full object-cover', 1400)}
-      <div class="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/35 to-transparent"></div>
       <span class="absolute top-4 left-4 spons-badge">CN Premium Articles</span>
-      <div class="absolute bottom-0 left-0 p-6 md:p-8 text-white max-w-2xl">
-        <h4 class="font-display text-2xl md:text-[2rem] leading-tight">${s.title}</h4>
-        <p class="mt-2 text-white/80 md:text-lg">${s.text}</p>
-      </div>
     </a>`).join('');
   dots.innerHTML = SPONSORED.map((_, i) => `<button class="spons-dot${i ? '' : ' is-on'}" data-i="${i}" aria-label="Slide ${i + 1}"></button>`).join('');
 
