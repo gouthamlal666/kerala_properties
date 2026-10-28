@@ -306,6 +306,7 @@ function initSponsored() {
     <a href="#" class="spons-slide${i ? '' : ' is-on'}" aria-hidden="${i ? 'true' : 'false'}" aria-label="${s.title}">
       ${imgTag(s.img, s.title, 'absolute inset-0 w-full h-full object-cover', 1400)}
       <span class="absolute top-4 left-4 spons-badge">CN Premium Articles</span>
+      <span class="spons-more">More Details <span aria-hidden="true">→</span></span>
     </a>`).join('');
   dots.innerHTML = SPONSORED.map((_, i) => `<button class="spons-dot${i ? '' : ' is-on'}" data-i="${i}" aria-label="Slide ${i + 1}"></button>`).join('');
 
