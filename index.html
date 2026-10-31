@@ -166,7 +166,7 @@
 
     <!-- ============ SEARCH (slim, full width, above Latest updates) ============ -->
     <section id="search" class="qsearch-band" aria-label="Search properties">
-      <div class="wrap py-3 md:py-4 reveal">
+      <div class="wrap py-1.5 reveal">
         <form id="searchForm" class="qsearch" novalidate>
           <fieldset class="qs qs--status">
             <legend class="qs-label">Status</legend>
@@ -211,6 +211,7 @@
         <div class="grid lg:grid-cols-12 gap-8 lg:gap-10">
           <!-- Most recent news -->
           <div class="lg:col-span-4 min-w-0 flex flex-col">
+            <p class="eyebrow reveal">Latest Updates</p>
             <h2 class="news-head reveal">Most Recent News</h2>
             <a href="#" class="group block flex-1">
               <h3 class="font-display text-xl md:text-[1.45rem] leading-snug group-hover:text-saffron transition-colors">ONE adds second Rio de Janeiro call to SX2 service</h3>
@@ -224,6 +225,7 @@
 
           <!-- Sponsored content (auto slider) -->
           <div class="lg:col-span-8 min-w-0 flex flex-col">
+            <p class="eyebrow reveal">Advertorial</p>
             <div class="flex items-center justify-between gap-4">
               <h2 class="news-head reveal">Sponsored Content</h2>
               <div class="flex gap-2 mb-4">
@@ -241,7 +243,7 @@
           <div class="lg:col-span-8 min-w-0">
             <div id="newsGrid" class="grid sm:grid-cols-2 xl:grid-cols-3 gap-6" data-stagger></div>
             <div class="mt-10 text-center">
-              <a href="news.html" class="btn-ghost">More News »</a>
+              <a href="news.html" class="btn-primary">More News »</a>
             </div>
 
             <!-- ============ PROPERTIES (left column, beside Premium Properties) ============ -->
@@ -259,6 +261,7 @@
 
           <!-- Premium properties (ad slots) — runs down beside news and properties -->
           <aside class="lg:col-span-4">
+            <p class="eyebrow reveal">Superior Properties</p>
             <h2 class="news-head reveal">Premium Properties</h2>
             <div id="premAds" class="grid sm:grid-cols-2 lg:grid-cols-1 gap-5" data-stagger></div>
           </aside>
@@ -271,7 +274,7 @@
       <div class="wrap">
         <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 reveal">
           <div class="max-w-3xl">
-            <p class="eyebrow text-lagoon">Buy &amp; sell locally</p>
+            <p class="eyebrow">Buy &amp; sell locally</p>
             <h2 class="section-title text-white" style="font-size:clamp(1.6rem,2.6vw,2.2rem)">Surplus and Used Building Materials / Household Items for sale</h2>
           </div>
           <label class="dark-select-pill shrink-0">
@@ -281,7 +284,7 @@
         </div>
         <div id="materialGrid" data-stagger class="mat-grid"></div>
         <div class="mt-10 text-center">
-          <a href="surplus.html" class="btn-outline-light">View More</a>
+          <a href="surplus.html" class="btn-primary">Know More <span aria-hidden="true">→</span></a>
         </div>
       </div>
     </section>

@@ -375,7 +375,7 @@ function renderProperties() {
           <div class="prop-row"><dt>${ICONS.tag}Price</dt><dd class="text-saffron-600">${p.price}</dd></div>
           <div class="prop-row"><dt>${ICONS.area}Covered Area</dt><dd>${p.area}</dd></div>
         </dl>
-        <a href="#" class="mt-6 flex items-center justify-center gap-2 h-11 rounded-full border border-ink/10 font-semibold text-sm hover:bg-ink hover:text-white hover:border-ink transition">View More <span aria-hidden="true">→</span></a>
+        <a href="#" class="mt-6 flex items-center justify-center gap-2 h-11 bg-saffron text-white font-semibold text-sm hover:bg-saffron-600 transition">Know More <span aria-hidden="true">→</span></a>
       </div>
     </article>`).join('');
 }
